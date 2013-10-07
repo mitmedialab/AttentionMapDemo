@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Attention Map</title>
+
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="img/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="img/ico/favicon.png">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="img/thumb.png" />
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+      <!--<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">-->
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+      <!--<link href="css/bootstrap-theme.min.css" rel="stylesheet" media="screen">-->
+    <link rel="stylesheet" href="css/app.css" media="screen">
+  </head>
+
+  <body>
+
+    <div id="am-progress-bar" class="panel panel-default" style="display:none;">
+      <div class="panel-body">
+        <h2>Loading...</h2>
+        <div class="progress progress-striped active">
+          <div class="progress-bar" role="progressbar" style="width: 100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="am-content" class="container">
+
+      <div class="row">
+        <div class="col-md-12">
+            <a href="http://civic.mit.edu/" class="pull-right"><img src="img/c4cm-badge.gif" alt="MIT Center for Civic Media"/></a>
+            <h1>Attention Map</h1>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- templates -->
+    <script type="text/template" id="am-thing-template">
+    </script>
+
+    <!-- all the JS includes -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" charset="utf-8"></script>
+      <!--<script src="lib/jquery-1.10.2.min.js" charset="utf-8"></script>-->
+    <script src="lib/underscore-min.js" charset="utf-8"></script>
+    <script src="lib/backbone-min.js" charset="utf-8"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+      <!--<script src="lib/bootstrap.min.js" charset="utf-8"></script>-->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+      <!--<script src="lib/d3.v3.min.js" charset="utf-8"></script>-->
+    <script src="http://d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"></script>
+      <!--<script src="lib/d3.geo.projection.v0.min.js" charset="utf-8"></script>-->
+    <script src="lib/topojson.v1.min.js" charset="utf-8"></script>
+
+    <!-- our application code -->
+    <script src="lib/country-util.js" charset="utf-8"></script>
+    <script src="app/app.js" charset="utf-8"></script>
+    <script src="app/routes.js" charset="utf-8"></script>
+    <script src="app/models.js" charset="utf-8"></script>
+    <script src="app/views.js" charset="utf-8"></script>
+
+    <script>$(function(){ App.initialize(); });</script>
+
+  </body>
+</html>
