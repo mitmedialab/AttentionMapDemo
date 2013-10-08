@@ -39,11 +39,24 @@
         </div>
       </div>
 
+      <div class="row">
+        <div class="col-md-12">
+          <div id='am-media-picker'></div>
+        </div>
+      </dv>
+
     </div>
 
     <!-- templates -->
-    <script type="text/template" id="am-thing-template">
+    <script type="text/template" id="am-media-picker-template">
+      <b>Pick your media sources:</b>
+      <ul>
+      </ul>
     </script>
+    <script type="text/template" id="am-media-picker-item-template">
+      <%=name%>
+    </script>
+
 
     <!-- all the JS includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" charset="utf-8"></script>
