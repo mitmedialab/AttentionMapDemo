@@ -14,7 +14,8 @@ window.App = {
     },
 
 	initialize: function(){
-		App.debug("Initializing App");
+		$('#am-progress-bar').show();
+        App.debug("Initializing App");
 		ISO3166.initialize();
         var runApp = _.after(1,App.run);
         App.allMediaSources = new App.MediaSourceCollection();
@@ -27,6 +28,7 @@ window.App = {
 
     run: function(){
         App.debug('Run App');
+        $('#am-progress-bar').hide();
         App.mediaPicker = new App.MediaPickerView({
             'mediaSources': App.allMediaSources.models
         });
