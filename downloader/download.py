@@ -13,6 +13,7 @@ class Downloader():
 		self.mc = MediaCloud(self.config.get('mediacloud','username'), self.config.get('mediacloud','password'))
 		self.db = MongoStoryDatabase(self.config.get('mongo','db_name'))
 		self.run()
+		#self.cleanupConfig()
 		print "Execution time: " + time.time() - start_time, " seconds"
 
 	def create(self, media_id):
@@ -57,21 +58,37 @@ class Downloader():
 		cfgfile = open("downloader.config",'w')
 		self.config.write(cfgfile)
 		cfgfile.close()
-	
+
+	def cleanupConfig(self):
+		self.config.set('state', 'state', '')
+		self.config.set('state', 'media_id', '')
+		self.config.set('state', 'subset_id', '')
+		self.config.set('state', 'page_num', '')
+		self.writeConfig()
+
 	def run(self): 
 		state = self.config.get('state','state')
 		media_id = self.config.get('state','media_id')
 		subset_id = self.config.get('state','subset_id')
 		page_num = self.config.get('state','page_num')
 
-		if (state is "creation" or state is "waiting") and subset_id is not None:
+		print "Current state information: "
+		print "State: " + state
+		print "Media id: " + media_id
+		print "Subset id: " + subset_id
+		print "Page number: "+ page_num
+
+		if (state == "creation" or state == "waiting") and subset_id is not None:
+			print "Starting in the waiting state..."
 			self.wait(subset_id)
 			self.fetch(subset_id)
 			self.runAllStates(newMediaIds(media_id))
-		if state is "fetching":
+		if state == "fetching":
+			print "Starting in the fetching state..."
 			self.fetch(subset_id, page_num)
 			self.runAllStates(newMediaIds(media_id))
 		else:
+			print "Starting everything from the beginning..."
 			self.runAllStates(self.media_ids)
 			
 	def runAllStates(self, media_ids):
