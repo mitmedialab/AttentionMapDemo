@@ -45,6 +45,12 @@
         </div>
       </dv>
 
+      <div class="row">
+        <div class="col-md-12">
+          <div id='am-media-maps'></div>
+        </div>
+      </dv>
+
     </div>
 
     <!-- templates -->
@@ -54,7 +60,11 @@
       </ul>
     </script>
     <script type="text/template" id="am-media-picker-item-template">
-      <%=name%>
+      <a href="#"><%=name%></a>
+    </script>
+    <script type="text/template" id="am-media-map-template">
+      <h2><%=name%></h2>
+      <div class="am-world-map"></div>
     </script>
 
 

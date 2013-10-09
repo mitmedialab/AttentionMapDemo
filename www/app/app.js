@@ -3,7 +3,23 @@
 window.App = {
 
     config: {
-        writeLog: true
+        writeLog: true,
+        colors: {
+            minColor: 'rgb(241,233,187)',
+            maxColor: 'rgb(207,97,35)',
+            disabledColor: 'rgb(240, 240, 240)',
+            enabledColor: 'rgb(243,195,99)',
+            outline: 'rgb(255,255,255)'
+        }
+    },
+
+    globals: {
+        worldMap: null,         // reusable topojson
+        countryIdToPath: null,  // lookup from country numeric id to path element
+        eventMgr: null,         // global event aggregator (http://stackoverflow.com/questions/10042124/backbone-js-global-events)
+        allMediaSources: null,  // collection of the data loaded
+        mediaPicker: null,      // singleton media picker
+        mediaIdToMap: null      // lookup from media id to mapview
     },
 
     // wrapper so we can turn off logging in one place
@@ -14,23 +30,42 @@ window.App = {
     },
 
 	initialize: function(){
+        App.globals.eventMgr = _.extend({}, Backbone.Events);
 		$('#am-progress-bar').show();
         App.debug("Initializing App");
 		ISO3166.initialize();
-        var runApp = _.after(1,App.run);
-        App.allMediaSources = new App.MediaSourceCollection();
+        var runApp = _.after(2,App.run);
+        App.globals.allMediaSources = new App.MediaSourceCollection();
         // kick off all async loading
-        App.allMediaSources.fetch({
+        App.globals.allMediaSources.fetch({
             url: "data/testdata.json",
             success: runApp
         });
+        d3.json('data/world-110m.json', function(data){
+            App.globals.worldMap = data;
+            App.globals.countryIdToPath = {};
+            var countries = topojson.feature(App.globals.worldMap, App.globals.worldMap.objects.countries).features;
+            $.each(countries, function (i, d) {
+                App.globals.countryIdToPath[d.id] = d;
+            });
+            runApp();
+        });
+
 	},
 
     run: function(){
         App.debug('Run App');
         $('#am-progress-bar').hide();
-        App.mediaPicker = new App.MediaPickerView({
-            'mediaSources': App.allMediaSources.models
+        App.globals.mediaPicker = new App.MediaPickerView({
+            'mediaSources': App.globals.allMediaSources.models
+        });
+        // create all the maps
+        App.globals.mediaIdToMap = {};
+        _.each(App.globals.allMediaSources.models, function(mediaSource){
+            App.debug("  Adding map for mediaId "+mediaSource.get('mediaId'));
+            var mediaMapView = new App.MediaMapView({'mediaSource':mediaSource});
+            App.globals.mediaIdToMap[mediaSource.get('mediaId')] = mediaMapView;
+            $('#am-media-maps').append(mediaMapView.el);
         });
     }
 
