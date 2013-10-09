@@ -5,8 +5,8 @@ App.Country = Backbone.Model.extend({
             'id':ISO3166.getIdFromAlpha3(args['alpha3']),
             'alpha3':args['alpha3'],
             'name':ISO3166.getNameFromAlpha3(args['alpha3']),
-            'centroid':Centroid.fromAlpha3(args['alpha3'])
-            /*'pct': args['count'] / args['totalMediaArticles']*/
+            'centroid':Centroid.fromAlpha3(args['alpha3']),
+            'pct': args['count'] / args['totalMediaArticles']
         });
     }
 });
@@ -14,7 +14,12 @@ App.Country = Backbone.Model.extend({
 App.CountryCollection = Backbone.Collection.extend({
     model: App.Country,
     initialize: function(){
-    }    
+    },
+    getMaxPct: function(){
+        return _.max(this.models, function(country){
+            return country.get('pct');
+        }).get('pct');
+    }
 });
 
 App.MediaSource = Backbone.Model.extend({
@@ -24,11 +29,9 @@ App.MediaSource = Backbone.Model.extend({
             'endDate': Date.parse(args['endDate']),
             'id': args['mediaId']
         });
-        /*var countries = [];
-        $.each(args['countries'], function (index, countryInfo) {
-            countryInfo['totalMediaArticles'] = args['articleCount'];
-            countries.push( new App.Country(countryInfo) );
-        });*/
+        for(index in args['countries']){
+            args['countries'][index]['totalMediaArticles'] = args['articleCount'];
+        }
         this.set( {'countries': new App.CountryCollection(args['countries']) });
     }
 });
