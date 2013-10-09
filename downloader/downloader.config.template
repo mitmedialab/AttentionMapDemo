@@ -1,0 +1,14 @@
+[mediacloud]
+username:
+password:
+
+[media]
+#separate media ids that you want with a comma -- 1,314,21603,1148,1094
+media_ids: 1
+
+#date format is YYYY-MM-DD
+start_date: 2013-01-01
+end_date: 2013-10-01
+
+[mongo]
+db_name:mediacloud
