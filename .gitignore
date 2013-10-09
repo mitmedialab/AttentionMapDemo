@@ -1,0 +1,14 @@
+
+downloader/downloader.config
+
+downloader/duplicateWork/StorySubset.pyc
+
+downloader/duplicateWork/download.py
+
+downloader/duplicateWork/requeststories.py
+
+downloader/duplicateWork/story_utils.py
+
+*.pyc
+
+*.log
