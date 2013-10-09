@@ -5,8 +5,8 @@
  "startDate": "2013-01-01T00:00:0.000Z",
  "endDate": "2013-10-08T00:00:0.000Z",
  "countries": [
-    { "code": "fr", "count": 401 },
-    { "code": "us", "count": 4033 }
+    { "alpha3": "FRA", "count": 401 },
+    { "alpha3": "USA", "count": 4033 }
  ]
 },
 {"mediaId": 314,
@@ -15,8 +15,8 @@
  "startDate": "2013-01-01T00:00:0.000Z",
  "endDate": "2013-10-08T00:00:0.000Z",
  "countries": [
-    { "code": "fr", "count": 23 },
-    { "code": "us", "count": 2213 }
+    { "alpha3": "FRA", "count": 23 },
+    { "alpha3": "USA", "count": 2213 }
  ] 
 }
 ]

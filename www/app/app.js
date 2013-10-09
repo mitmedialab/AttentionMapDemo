@@ -21,7 +21,7 @@ window.App = {
         App.allMediaSources = new App.MediaSourceCollection();
         // kick off all async loading
         App.allMediaSources.fetch({
-            url: "data/data.json",
+            url: "data/testdata.json",
             success: runApp
         });
 	},

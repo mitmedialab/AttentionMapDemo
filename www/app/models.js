@@ -2,12 +2,12 @@
 App.Country = Backbone.Model.extend({
     initialize: function(args){
         this.set({
-            'id':ISO3166.getIdFromAlpha3(args['code']),
-            'alpha3':args['code'],
-            'name':ISO3166.getNameFromId(this.get('id')),
-            'centroid':Centroid.fromAlpha3(args['code'])
+            'id':ISO3166.getIdFromAlpha3(args['alpha3']),
+            'alpha3':args['alpha3'],
+            'name':ISO3166.getNameFromAlpha3(args['alpha3']),
+            'centroid':Centroid.fromAlpha3(args['alpha3']),
+            'pct': args['count'] / args['totalMediaArticles']
         });
-        // count has the number of articles about this country
     }
 });
 
@@ -18,9 +18,10 @@ App.MediaSource = Backbone.Model.extend({
             'endDate': Date.parse(args['endDate'])
         });
         var countries = [];
-        for(country in countries){
-            country['totalArticles']
-            countries.push( new App.Country(country) );
+        for(index in args['countries']){
+            var countryInfo = args['countries'][index];
+            countryInfo['totalMediaArticles'] = args['articleCount'];
+            countries.push( new App.Country(countryInfo) );
         }
         this.set({'countries':countries});
     }
