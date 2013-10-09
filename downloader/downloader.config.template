@@ -27,3 +27,7 @@ state:
 
 #page number if its fetching
 page_num:
+
+#sets max pages that downloader will fetch at one time before exiting. Big jobs might have hundreds of pages. 
+#Put 0 for it to ignore a maximum
+max_pages:0

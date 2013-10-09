@@ -35,20 +35,21 @@ class Downloader():
 			print "Stories aren't ready...Waiting 30 seconds..."
 			time.sleep(30)
 
-	def fetch(self, subset_id):
+	def fetch(self, subset_id, page=1):
 		print "Fetching..."
+		max_pages = self.config.get("state","max_pages")
 		self.config.set("state", "state", "fetching")
 		self.writeConfig()
-	
 		more_stories = True
-		page = 1
-		while more_stories:
+		pages_written = 0
+		while more_stories and (pages_written <= max_pages or max_pages == 0):
 			stories = self.mc.allProcessedInSubset(subset_id,page)
 			if len(stories)==0:
 				more_stories = False
 			for story in stories:
-				worked = db.addStory(story)
+				worked = db.addStory(story,save_extracted_text=True)
 			page+=1
+			pages_written+=1
 			self.config.set("state", "page_num", page)
 			self.writeConfig()
 
@@ -68,7 +69,7 @@ class Downloader():
 			self.fetch(subset_id)
 			self.runAllStates(newMediaIds(media_id))
 		if state is "fetching":
-			self.fetch(subset_id)
+			self.fetch(subset_id, page_num)
 			self.runAllStates(newMediaIds(media_id))
 		else:
 			self.runAllStates(self.media_ids)
