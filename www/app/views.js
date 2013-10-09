@@ -13,7 +13,7 @@ App.MediaMapView = Backbone.View.extend({
 		var content = this.template({
 			name: this.options.mediaSource.get('mediaName')
 		});
-        this.$el.html( content );
+        this.$el.html( content );	// need to do this *before* adding the map so the d3.select works right
         this._initMap();
         this._initMapBackground();
         this._initMapCountries();
@@ -72,11 +72,6 @@ App.MediaMapView = Backbone.View.extend({
     },
     _initMapCountries: function() {
         var that = this;
-        // figure out heatmap 
-/*        var colors = _.map(this.options.mediaSource.get("countries").models, function (country) {
-            return {id:country.get('id'), color:that.map.color(d.get('count'))};
-        });*/
-        // Render countries
         var g = this.map.svg.select('#am-data')
             .selectAll('.am-country')
             .data(this.options.mediaSource.get("countries").models, function (d) { return d.get('id'); });
@@ -133,7 +128,7 @@ App.MediaPickerItemView = Backbone.View.extend({
     },
     handleClick: function(){
     	var mediaId = this.options.mediaSource.get('mediaId');
-    	App.debug("render media "+mediaId);
+    	App.debug("toggle media "+mediaId);
     	App.globals.eventMgr.trigger("toggleMediaSource",mediaId);
     }
 });
