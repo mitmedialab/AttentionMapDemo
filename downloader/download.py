@@ -14,7 +14,7 @@ class Downloader():
 		self.db = MongoStoryDatabase(self.config.get('mongo','db_name'))
 		self.run()
 		#self.cleanupConfig()
-		print "Execution time: " + time.time() - start_time, " seconds"
+		print "Execution time: " + str(time.time() - start_time), " seconds"
 
 	def create(self, media_id):
 		print "Creating..."
@@ -57,6 +57,8 @@ class Downloader():
 			pages_written+=1
 			self.config.set("state", "page_num", page)
 			self.writeConfig()
+		if more_stories is not True:
+			self.cleanupConfig()
 
 
 	def writeConfig(self):
@@ -64,8 +66,8 @@ class Downloader():
 		self.config.write(cfgfile)
 		cfgfile.close()
 
-	def cleanupConfig(self):
-		self.config.set('state', 'state', '')
+	def cleanupConfig(self,state=''):
+		self.config.set('state', 'state', state)
 		self.config.set('state', 'media_id', '')
 		self.config.set('state', 'subset_id', '')
 		self.config.set('state', 'page_num', '')
@@ -76,25 +78,30 @@ class Downloader():
 		media_id = self.config.get('state','media_id')
 		subset_id = self.config.get('state','subset_id')
 		page_num = self.config.get('state','page_num')
-
+		print "------------------------------------"
 		print "Current state information: "
 		print "State: " + state
 		print "Media id: " + media_id
 		print "Subset id: " + subset_id
 		print "Page number: "+ page_num
+		print "------------------------------------"
 
-		if (state == "creation" or state == "waiting") and subset_id is not None:
+		if state == 'finished':
+			print "It looks like you already finished this job. Check your DB for the presence of the stories. If you think you are receiving this message in error, remove the 'finished' value from the config file."
+		elif (state == "creation" or state == "waiting") and subset_id is not None:
 			print "Starting in the waiting state..."
 			self.wait(subset_id)
 			self.fetch(subset_id)
-			self.runAllStates(newMediaIds(media_id))
-		if state == "fetching":
+			self.runAllStates(self.getNewIDList(media_id))
+		elif state == "fetching":
 			print "Starting in the fetching state..."
 			self.fetch(subset_id, page_num)
-			self.runAllStates(newMediaIds(media_id))
+			self.runAllStates(self.getNewIDList(media_id))
 		else:
 			print "Starting everything from the beginning..."
 			self.runAllStates(self.media_ids)
+
+		self.cleanupConfig('finished')
 			
 	def runAllStates(self, media_ids):
 		for media_id in media_ids:
@@ -102,7 +109,7 @@ class Downloader():
 				self.wait(subset_id)
 				self.fetch(subset_id)
 
-	def newMediaIds(self, media_id):
+	def getNewIDList(self, media_id):
 		newList = self.media_ids[:]
 		for i in range(len(newList)):
 			if newList[i] != media_id:
