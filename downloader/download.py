@@ -38,6 +38,7 @@ class Downloader():
 
 	def fetch(self, subset_id, page=1):
 		print "Fetching..."
+		print "Starting with page " + str(page)
 		max_pages = self.config.get("state","max_pages")
 		self.config.set("state", "state", "fetching")
 		self.writeConfig()
@@ -48,11 +49,15 @@ class Downloader():
 			if len(stories)==0:
 				more_stories = False
 			for story in stories:
-				worked = db.addStory(story,save_extracted_text=True)
+				worked = self.db.addStory(story,save_extracted_text=True)
+				
+			print "Saved stories on page " + str(page)
+			page=int(page)
 			page+=1
 			pages_written+=1
 			self.config.set("state", "page_num", page)
 			self.writeConfig()
+
 
 	def writeConfig(self):
 		cfgfile = open("downloader.config",'w')
