@@ -49,7 +49,7 @@ class Downloader():
 			if len(stories)==0:
 				more_stories = False
 			for story in stories:
-				worked = self.db.addStory(story,save_extracted_text=True)
+				worked = self.db.addStory(story,save_story_sentences=True)
 				
 			print "Saved stories on page " + str(page)
 			page=int(page)
