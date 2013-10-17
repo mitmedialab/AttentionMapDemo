@@ -14,7 +14,7 @@ class LuceneDownloader():
 		self.config.read('downloader.config')
 		self.media_ids = self.config.get('media','media_ids').split(',')
 		self.mc = MediaCloud(self.config.get('mediacloud','username'), self.config.get('mediacloud','password'))
-		self.db = MongoStoryDatabase(self.config.get('mongo','db_name'))
+		self.db = MongoStoryDatabase(self.config.get('mongo','db_name'),self.config.get('mongo','host'),int(self.config.get('mongo','port')))
 		self.run()
 		self.log.info("Execution time: " + str(time.time() - start_time), " seconds")
 
