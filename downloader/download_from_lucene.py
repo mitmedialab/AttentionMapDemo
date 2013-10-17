@@ -42,28 +42,38 @@ class LuceneDownloader():
 		pages_written = 0
 		self.log.info("Starting with page " + str(page) + " (up to "+str(max_pages)+" pages)")
 		lucene = Lucene(self.config.get('media','start_date'),self.config.get('media','end_date'),media_id)
+		stories = {}
 		while more_sentences and ( (pages_written <= max_pages) or (max_pages == 0) ) and ((page-1)*lucene.SENTENCES_PER_PAGE <= result_count):
 			sentences = lucene.get_sentences( page )
 			if len(sentences)==0:
 				more_sentences = False
+			# build the sentences into stories
 			for sentence in sentences:
 				worked = True
-				# create story if needed
-				if not self.db.storyExists(sentence['stories_id']):
-					self.db._saveStory({ # bypass addStory because we don't have the fields
+				story_id = sentence['stories_id']
+				if story_id in stories:
+					stories[story_id]['story_text'] += sentence['sentence']
+				else:
+					stories[story_id] = {
 						'_id': int(sentence['stories_id']),
 						'media_id': sentence['media_id'],
-						'story_text': ''
-					})
-				# add sentence to existing story (http://docs.mongodb.org/manual/reference/method/db.collection.update/#db.collection.update)
-				existing_text = self.db.getStory(sentence['stories_id'])['story_text']
-				self.db._db.stories.update(
-					{'_id':int(sentence['stories_id'])},
-					{'$set':{
-						'story_text': existing_text+" "+sentence['sentence']
-					}}
-				)
-			self.log.info("Saved sentences on page " + str(page))
+						'story_text': sentence['sentence']
+					}
+			# now save all the stories
+			for story_id, story in stories.iteritems():
+				# create story if needed
+				if not self.db.storyExists(story_id):
+					self.db._saveStory(story)
+				else:
+					# add sentence to existing story (http://docs.mongodb.org/manual/reference/method/db.collection.update/#db.collection.update)
+					existing_text = self.db.getStory(story['_id'])['story_text']
+					self.db._db.stories.update(
+						{'_id':int(story['_id'])},
+						{'$set':{
+							'story_text': existing_text+" "+story['story_text']
+						}}
+					)
+			self.log.info("Saved "+str(len(stories))+" stories from page " + str(page))
 			page=int(page)
 			page+=1
 			pages_written+=1

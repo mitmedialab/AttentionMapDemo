@@ -4,7 +4,7 @@ import xml.etree.ElementTree
 class Lucene():
 
     SENTENCES_PER_PAGE = 10
-    FAKE = False
+    FAKE = True
 
     def __init__(self, start_date, end_date, media_id):
         self.log = logging.getLogger('mediameter')
