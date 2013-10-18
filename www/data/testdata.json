@@ -5,8 +5,24 @@
  "startDate": "2013-01-01T00:00:0.000Z",
  "endDate": "2013-10-08T00:00:0.000Z",
  "countries": [
-    { "alpha3": "FRA", "count": 401 },
-    { "alpha3": "USA", "count": 4033 }
+    { "alpha3": "FRA", "count": 401, "people": [
+    	{ "name": "Person 1", "count": 400 },
+    	{ "name": "Person 0", "count": 4 },
+    	{ "name": "Person 2", "count": 100 },
+    	{ "name": "Person 3", "count": 200 },
+    	{ "name": "Person 4", "count": 300 },
+    	{ "name": "Person 5", "count": 200 },
+    	{ "name": "Person 6", "count": 100 }
+    ] },
+    { "alpha3": "USA", "count": 4033, "people": [
+    	{ "name": "Person 1", "count": 400 },
+    	{ "name": "Person 0", "count": 4 },
+    	{ "name": "Person 2", "count": 100 },
+    	{ "name": "Person 3", "count": 200 },
+    	{ "name": "Person 4", "count": 300 },
+    	{ "name": "Person 5", "count": 200 },
+    	{ "name": "Person 6", "count": 100 }
+    ] }
  ]
 },
 {"mediaId": 314,
@@ -15,8 +31,24 @@
  "startDate": "2013-01-01T00:00:0.000Z",
  "endDate": "2013-10-08T00:00:0.000Z",
  "countries": [
-    { "alpha3": "RUS", "count": 200 },
-    { "alpha3": "AUS", "count": 400 }
+    { "alpha3": "RUS", "count": 200, "people": [
+    	{ "name": "Person 1", "count": 400 },
+    	{ "name": "Person 0", "count": 4 },
+    	{ "name": "Person 2", "count": 100 },
+    	{ "name": "Person 3", "count": 200 },
+    	{ "name": "Person 4", "count": 300 },
+    	{ "name": "Person 5", "count": 200 },
+    	{ "name": "Person 6", "count": 100 }
+    ] },
+    { "alpha3": "AUS", "count": 400, "people": [
+    	{ "name": "Person 1", "count": 400 },
+    	{ "name": "Person 0", "count": 4 },
+    	{ "name": "Person 2", "count": 100 },
+    	{ "name": "Person 3", "count": 200 },
+    	{ "name": "Person 4", "count": 300 },
+    	{ "name": "Person 5", "count": 200 },
+    	{ "name": "Person 6", "count": 100 }
+    ] }
  ] 
 }
 ]
