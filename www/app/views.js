@@ -6,27 +6,28 @@ App.MediaMapView = Backbone.View.extend({
 	initialize: function(){
 		this.id = "am-media-map-"+this._getMediaId();
 		this.render();
-		_.bindAll(this, 'toggleVisibility')
- 		App.globals.eventMgr.bind("toggleMediaSource", this.toggleVisibility);
+		_.bindAll(this, 'changeMediaId')
+ 		App.globals.eventMgr.bind("changeMediaSource", this.changeMediaId);
 	},
 	render: function(){
 		var content = this.template({
-			name: this.options.mediaSource.get('mediaName')
+			name: this._getCurrentMediaSource().get('mediaName')
 		});
         this.$el.html( content );	// need to do this *before* adding the map so the d3.select works right
         this._initMap();
-        this._initMapBackground();
-        this._initMapCountries();
-        this.$el.hide();
+        this._renderMapBackground();
+        this._renderMapCountries();
     },
-    toggleVisibility: function(mediaId){
-    	if(mediaId==this._getMediaId()){
-    		this.$el.toggle();
-    	}
+    changeMediaId: function(mediaId){
+    	this.options.currentMediaId = mediaId;
+        this._renderMapCountries();
     },
 	_getMediaId: function(){
-		return this.options.mediaSource.get('mediaId');
+		return this._getCurrentMediaSource().get('mediaId');
 	},
+    _getCurrentMediaSource: function(){
+        return this.options.mediaSources.get(this.options.currentMediaId);
+    },
     _initMap: function(){
         var map = {
 			'container': this.$('.am-world-map').get()[0],
@@ -50,7 +51,7 @@ App.MediaMapView = Backbone.View.extend({
             .attr("height", map.height);
         map.svg.append('g').attr('id', 'am-background');
         map.svg.append('g').attr('id', 'am-data');
-        map.maxWeight = d3.max(this.options.mediaSource.get("countries").models, function (d) { return d.get('count'); });
+        map.maxWeight = d3.max(this._getCurrentMediaSource().get("countries").models, function (d) { return d.get('count'); });
         map.color = d3.scale.linear()
             .range([App.config.colors.minColor, App.config.colors.maxColor])
             .domain([0, map.maxWeight]);
@@ -59,7 +60,7 @@ App.MediaMapView = Backbone.View.extend({
             .domain([0, map.maxWeight]);
         this.map = map;	// save all the map stuff on this object
 	},
-    _initMapBackground: function() {
+    _renderMapBackground: function() {
         var world = App.globals.worldMap;
         var countries = topojson.feature(world, world.objects.countries).features;
         var country = this.map.svg.select('#am-background').selectAll(".am-country").data(countries);
@@ -70,11 +71,11 @@ App.MediaMapView = Backbone.View.extend({
             .attr('stroke', App.config.colors.outline)
             .attr("d", this.map.path);
     },
-    _initMapCountries: function() {
+    _renderMapCountries: function() {
         var that = this;
         var g = this.map.svg.select('#am-data')
             .selectAll('.am-country')
-            .data(this.options.mediaSource.get("countries").models, function (d) { return d.get('id'); });
+            .data(this._getCurrentMediaSource().get("countries").models, function (d) { return d.get('id'); });
         g.enter()
             .append("path")
             .attr("class", "am-country")
@@ -83,12 +84,10 @@ App.MediaMapView = Backbone.View.extend({
             .attr("data-id", function(d,i) {return d.id})
             .attr("d", function (d) { return that.map.path(App.globals.countryIdToPath[d.get('id')]); })
             /*.on("click", function (d) { return that.handleValidCountryClick(d); })*/;
-        g.attr("stroke-width", "1")
-            .attr("stroke", App.config.colors.outline)
+        g.exit()
+            .remove();
         g.transition()
-            .attr("fill", function (d) {return that.map.color(d.get('count'));} )
-            .attr("stroke", App.config.colors.outline)
-            .style("opacity", "1");
+            .attr("fill", function (d) {return that.map.color(d.get('count'));} );
     }
 });
 
@@ -105,17 +104,17 @@ App.MediaPickerView = Backbone.View.extend({
         		'mediaSource': this.options['mediaSources'][idx]
         	});
         	itemView.render();
-        	this.$('ul').append(itemView.el);
+        	this.$('div.btn-group-vertical').append(itemView.el);
         }
     }
 });
 
 App.MediaPickerItemView = Backbone.View.extend({
-    tagName: 'li',
-    className: 'am-media-picker-item',
+    tagName: 'button',
+    className: 'btn btn-default am-media-picker-item',
     template: _.template($('#am-media-picker-item-template').html()),
     events: {
-    	"click	a"	:    "handleClick"
+    	"click	"	:    "handleClick"
     },
     initialize: function(){
     },
@@ -124,11 +123,12 @@ App.MediaPickerItemView = Backbone.View.extend({
 			id: this.options.mediaSource.get('mediaId'),
 			name: this.options.mediaSource.get('mediaName')
 		});
+        this.$el.attr('type','button');
         this.$el.html( content );
     },
     handleClick: function(){
     	var mediaId = this.options.mediaSource.get('mediaId');
-    	App.debug("toggle media "+mediaId);
-    	App.globals.eventMgr.trigger("toggleMediaSource",mediaId);
+    	App.debug("switch to media "+mediaId);
+    	App.globals.eventMgr.trigger("changeMediaSource",mediaId);
     }
 });

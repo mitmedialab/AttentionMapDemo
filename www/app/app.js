@@ -19,7 +19,7 @@ window.App = {
         eventMgr: null,         // global event aggregator (http://stackoverflow.com/questions/10042124/backbone-js-global-events)
         allMediaSources: null,  // collection of the data loaded
         mediaPicker: null,      // singleton media picker
-        mediaIdToMap: null      // lookup from media id to mapview
+        mediaMap: null,         // singleton media map
     },
 
     // wrapper so we can turn off logging in one place
@@ -60,13 +60,8 @@ window.App = {
             'mediaSources': App.globals.allMediaSources.models
         });
         // create all the maps
-        App.globals.mediaIdToMap = {};
-        _.each(App.globals.allMediaSources.models, function(mediaSource){
-            App.debug("  Adding map for mediaId "+mediaSource.get('mediaId'));
-            var mediaMapView = new App.MediaMapView({'mediaSource':mediaSource});
-            App.globals.mediaIdToMap[mediaSource.get('mediaId')] = mediaMapView;
-            $('#am-media-maps').append(mediaMapView.el);
-        });
+        App.globals.mediaMap = new App.MediaMapView({'currentMediaId':1, 'mediaSources':App.globals.allMediaSources});
+        $('#am-media-map').append(App.globals.mediaMap.el);
     }
 
 };

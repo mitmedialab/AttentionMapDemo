@@ -14,7 +14,7 @@
     <meta property="og:image" content="img/thumb.png" />
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
       <!--<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">-->
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    <!--<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">-->
       <!--<link href="css/bootstrap-theme.min.css" rel="stylesheet" media="screen">-->
     <link rel="stylesheet" href="css/app.css" media="screen">
   </head>
@@ -47,7 +47,7 @@
 
       <div class="row">
         <div class="col-md-12">
-          <div id='am-media-maps'></div>
+          <div id='am-media-map'></div>
         </div>
       </dv>
 
@@ -55,12 +55,11 @@
 
     <!-- templates -->
     <script type="text/template" id="am-media-picker-template">
-      <b>Pick your media sources:</b>
-      <ul>
-      </ul>
+      <div class="btn-group-vertical">
+      </div>
     </script>
     <script type="text/template" id="am-media-picker-item-template">
-      <a href="#"><%=name%></a>
+      <%=name%>
     </script>
     <script type="text/template" id="am-media-map-template">
       <h3><%=name%></h3>
