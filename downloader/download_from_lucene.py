@@ -1,6 +1,6 @@
 from mediameter.lucene import Lucene
+from mediameter.db import ParseableStoryDatabase
 from mediacloud.api import MediaCloud
-from mediacloud.storage import StoryDatabase, MongoStoryDatabase
 import logging
 import time
 import ConfigParser
@@ -14,7 +14,7 @@ class LuceneDownloader():
 		self.config.read('downloader.config')
 		self.media_ids = self.config.get('media','media_ids').split(',')
 		self.mc = MediaCloud(self.config.get('mediacloud','username'), self.config.get('mediacloud','password'))
-		self.db = MongoStoryDatabase(self.config.get('mongo','db_name'),self.config.get('mongo','host'),int(self.config.get('mongo','port')))
+		self.db = ParseableStoryDatabase(self.config.get('mongo','db_name'),self.config.get('mongo','host'),int(self.config.get('mongo','port')))
 		self.run()
 		self.log.info("Execution time: " + str(time.time() - start_time), " seconds")
 
@@ -63,16 +63,13 @@ class LuceneDownloader():
 			for story_id, story in stories.iteritems():
 				# create story if needed
 				if not self.db.storyExists(story_id):
-					self.db._saveStory(story)
+					self.db.saveNewStory(story)
 				else:
 					# add sentence to existing story (http://docs.mongodb.org/manual/reference/method/db.collection.update/#db.collection.update)
 					existing_text = self.db.getStory(story['_id'])['story_text']
-					self.db._db.stories.update(
-						{'_id':int(story['_id'])},
-						{'$set':{
-							'story_text': existing_text+" "+story['story_text']
-						}}
-					)
+					self.db.updateStory( int(story['_id']), {
+              			'story_text': existing_text+" "+story['story_text']
+            		} )
 			self.log.info("Saved "+str(len(stories))+" stories from page " + str(page))
 			page=int(page)
 			page+=1
