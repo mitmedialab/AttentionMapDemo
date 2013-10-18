@@ -13,3 +13,7 @@
 footer {
 	margin-bottom: 50px;
 }
+
+.am-content {
+	min-height: 400px;
+}

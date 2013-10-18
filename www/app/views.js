@@ -5,9 +5,11 @@ App.MediaMapView = Backbone.View.extend({
 	template: _.template($('#am-media-map-template').html()),
 	initialize: function(){
 		this.id = "am-media-map-"+this._getMediaId();
-		this.render();
 		_.bindAll(this, 'changeMediaId')
  		App.globals.eventMgr.bind("changeMediaSource", this.changeMediaId);
+        // init with first media source
+        this.options.currentMediaId = this.options.mediaSources.at(0).get('mediaId');
+        this.render();
 	},
 	render: function(){
 		var content = this.template({
@@ -19,6 +21,7 @@ App.MediaMapView = Backbone.View.extend({
         this._renderMapCountries();
     },
     changeMediaId: function(mediaId){
+        App.debug("Changing to media id "+mediaId);
     	this.options.currentMediaId = mediaId;
         this._renderMapCountries();
     },
@@ -83,11 +86,15 @@ App.MediaMapView = Backbone.View.extend({
             .attr("id", function(d,i) {return "am-country"+d.get('id')})
             .attr("data-id", function(d,i) {return d.id})
             .attr("d", function (d) { return that.map.path(App.globals.countryIdToPath[d.get('id')]); })
-            /*.on("click", function (d) { return that.handleValidCountryClick(d); })*/;
+            .on("click", function (d) { return that.handleValidCountryClick(d); });
         g.exit()
             .remove();
         g.transition()
             .attr("fill", function (d) {return that.map.color(d.get('count'));} );
+    },
+    handleValidCountryClick: function(country) {
+        console.log("Click on ");
+        console.log(country);
     }
 });
 
