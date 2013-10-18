@@ -31,10 +31,10 @@ App.MediaMapView = Backbone.View.extend({
     _initMap: function(){
         var map = {
 			'container': this.$('.am-world-map').get()[0],
-        	'width': 550,
-       		'height': 300,
-        	'scale': 130,
-        	'offset': [260,180],
+        	'width': 840,
+       		'height': 500,
+        	'scale': 197,
+        	'offset': [405,273],
         	'projection': null,
         	'svg': null,
         	'maxWeight': null,
