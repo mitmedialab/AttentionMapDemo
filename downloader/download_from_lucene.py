@@ -41,20 +41,7 @@ class LuceneDownloader():
 		stories = {}
 		while more_sentences and ( (pages_written <= max_pages) or (max_pages == 0) ) and ((page-1)*lucene.SENTENCES_PER_PAGE <= result_count):
 			self.log.info("Fetching page "+str(page))
-			sentences = lucene.get_sentences( page )
-			if len(sentences)==0:
-				more_sentences = False
-			# build the sentences into stories
-			for sentence in sentences:
-				worked = True
-				story_id = sentence['stories_id']
-				if story_id not in stories:
-					stories[story_id] = {
-						'_id': int(sentence['stories_id']),
-						'media_id': sentence['media_id'],
-						'sentences': {}
-					}
-				stories[story_id]['sentences'][sentence['sentence_number']] = sentence['sentence']
+			stories = lucene.get_stories_from_sentences( page )
 			self.log.info("  found "+str(len(stories))+" stories")
 			# now save all the stories
 			for story_id, story in stories.iteritems():
@@ -67,7 +54,7 @@ class LuceneDownloader():
 					# add sentence to existing story (http://docs.mongodb.org/manual/reference/method/db.collection.update/#db.collection.update)
 					existing_sentences = self.db.getStory(story['_id'])['sentences']
 					self.db.updateStory( int(story['_id']), {
-              			'sentences': existing_sentences.update( story['sentences'] )
+              			'sentences': dict( existing_sentences.items() + story['sentences'].items() )
             		} )
 			self.log.info("  Saved "+str(len(stories))+" stories from page " + str(page))
 			page=int(page)
