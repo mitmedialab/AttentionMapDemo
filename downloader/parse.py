@@ -19,7 +19,7 @@ log.info('Fetched '+str(len(stories))+' that need to be parsed')
 
 # iterate through stories, adding parsed-out metadata
 for story in stories:
-	info = parser.parse(story['story_text'])
+	info = parser.parse( ' '.join(story['sentences']) )
 	db.updateStory(story['_id'],{
 		'meta': info
 	})

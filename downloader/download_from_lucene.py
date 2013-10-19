@@ -1,14 +1,11 @@
+import logging, sys, time, ConfigParser
 from mediameter.lucene import Lucene
 from mediameter.db import ParseableStoryDatabase
 from mediacloud.api import MediaCloud
-import logging
-import time
-import ConfigParser
 
 class LuceneDownloader():
 
 	def __init__(self):
-		start_time = time.time()
 		self.log = logging.getLogger('mediacloud')
 		self.config = ConfigParser.ConfigParser()
 		self.config.read('downloader.config')
@@ -16,7 +13,6 @@ class LuceneDownloader():
 		self.mc = MediaCloud(self.config.get('mediacloud','username'), self.config.get('mediacloud','password'))
 		self.db = ParseableStoryDatabase(self.config.get('mongo','db_name'),self.config.get('mongo','host'),int(self.config.get('mongo','port')))
 		self.run()
-		self.log.info("Execution time: " + str(time.time() - start_time), " seconds")
 
 	def create(self, media_id):
 		self.log.info("Creating...")
@@ -44,6 +40,7 @@ class LuceneDownloader():
 		lucene = Lucene(self.config.get('media','start_date'),self.config.get('media','end_date'),media_id)
 		stories = {}
 		while more_sentences and ( (pages_written <= max_pages) or (max_pages == 0) ) and ((page-1)*lucene.SENTENCES_PER_PAGE <= result_count):
+			self.log.info("Fetching page "+str(page))
 			sentences = lucene.get_sentences( page )
 			if len(sentences)==0:
 				more_sentences = False
@@ -51,26 +48,28 @@ class LuceneDownloader():
 			for sentence in sentences:
 				worked = True
 				story_id = sentence['stories_id']
-				if story_id in stories:
-					stories[story_id]['story_text'] += sentence['sentence']
-				else:
+				if story_id not in stories:
 					stories[story_id] = {
 						'_id': int(sentence['stories_id']),
 						'media_id': sentence['media_id'],
-						'story_text': sentence['sentence']
+						'sentences': {}
 					}
+				stories[story_id]['sentences'][sentence['sentence_number']] = sentence['sentence']
+			self.log.info("  found "+str(len(stories))+" stories")
 			# now save all the stories
 			for story_id, story in stories.iteritems():
 				# create story if needed
 				if not self.db.storyExists(story_id):
+					self.log.info(" creating story "+str(story_id))
 					self.db.saveNewStory(story)
 				else:
+					self.log.info(" updating story "+str(story_id))
 					# add sentence to existing story (http://docs.mongodb.org/manual/reference/method/db.collection.update/#db.collection.update)
-					existing_text = self.db.getStory(story['_id'])['story_text']
+					existing_sentences = self.db.getStory(story['_id'])['sentences']
 					self.db.updateStory( int(story['_id']), {
-              			'story_text': existing_text+" "+story['story_text']
+              			'sentences': existing_sentences.update( story['sentences'] )
             		} )
-			self.log.info("Saved "+str(len(stories))+" stories from page " + str(page))
+			self.log.info("  Saved "+str(len(stories))+" stories from page " + str(page))
 			page=int(page)
 			page+=1
 			pages_written+=1
@@ -121,9 +120,11 @@ class LuceneDownloader():
 			elif (state == None) or (state == "creation") or (len(state)==0):
 				self.log.info("In the creation state...")
 				next_state = self.create(self.media_ids[0])
-			print "from "+state+" to "+next_state
+			self.log.info( "STATE: from "+state+" to "+next_state )
+			self.log.info( " " ) 
 			state = next_state
 
+start_time = time.time()
 d = LuceneDownloader()
 
-print "Stories are saved to the DB. Tally Ho!"
+print "Stories are saved to the DB (in "+str(time.time() - start_time)+" seconds)"
