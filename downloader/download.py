@@ -88,11 +88,15 @@ class Downloader():
 
 		if state == 'finished':
 			print "It looks like you already finished this job. Check your DB for the presence of the stories. If you think you are receiving this message in error, remove the 'finished' value from the config file."
-		elif (state == "creation" or state == "waiting") and subset_id is not None:
+		elif len(state) > 0 and len(subset_id) == 0 and len(media_id) > 0:
+			print "Retrieving " + str(media_id) + " again and starting over"
+			self.runAllStates(self.getNewIDList(media_id))
+		elif (state == "creation" or state == "waiting") and len(subset_id) > 0:
 			print "Starting in the waiting state..."
 			self.wait(subset_id)
 			self.fetch(subset_id)
 			self.runAllStates(self.getNewIDList(media_id))
+		
 		elif state == "fetching":
 			print "Starting in the fetching state..."
 			self.fetch(subset_id, page_num)
