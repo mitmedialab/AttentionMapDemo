@@ -15,7 +15,7 @@ class ParseableStoryDatabase(MongoStoryDatabase):
             { '$set': props }
         )
 
-    def unparsedArticles(self, count=10):
+    def unparsedArticles(self, count=100):
         results = self._db.stories.find({"meta":{'$exists': False}}).limit(count)
         stories = []
         for item in results:
