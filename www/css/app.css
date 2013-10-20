@@ -85,8 +85,11 @@ footer {
 	margin-bottom:0;
 }
 hr{
-	margin-top:0;
-	border-top:1px solid #ddd;
+	border-bottom: 1px solid #e6e6e6;
+	height: 10px;
+	margin-top: 0;
+	border-top: 1px solid #e6e6e6;
+	background-color: #f8f8f8;
 }
 .am-world-map{
 	height:645px;
