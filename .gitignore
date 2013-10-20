@@ -12,3 +12,7 @@ downloader/duplicateWork/story_utils.py
 *.pyc
 
 *.log
+
+www/us.json
+
+www/zoom.html

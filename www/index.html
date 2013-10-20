@@ -8,6 +8,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="img/ico/apple-touch-icon-57-precomposed.png">
+    <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="img/ico/favicon.png">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,42 +39,65 @@
             <h1>Attention Map</h1>
         </div>
       </div>
-
+      
     </header>
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          
+        </div>
 
-    <hr />
+        <!-- Collect the nav links, forms, and other content for toggling -->
+         
+         <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <div id='am-media-picker'><!-- nav item views go here --></div>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#about">About the project</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div>
+      </nav>
 
     <div class="container am-content">
       <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-12">
+          <div id="mouseover-info-window"></div>
           <div id='am-media-map'></div>
-        </div>
-        <div class="col-md-3">
-          <div id='am-media-picker'></div>
+          
+          
         </div>
       </div>
     </div>
 
     <hr />
 
-    <footer class="container">
+    <footer class="container" id="about">
       <div class="row">
         <div class="col-md-4">
           <h2>Mapping Global Attention</h2>
           <p>
-            more about what this is showing and how it works
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin faucibus, tellus sed lacinia venenatis, neque metus vestibulum mauris, sed consectetur dui dolor id nisi. Duis sed laoreet tellus. Aenean lorem ante, ultrices non condimentum vitae, accumsan sit amet dui. Cras faucibus ultrices tortor lacinia vehicula. Etiam risus quam, dictum et pulvinar quis, ornare sit amet nibh. Maecenas pharetra interdum nisl, at venenatis mi pulvinar ac. Donec varius neque sit amet sem sollicitudin, sed elementum felis porta. Integer facilisis suscipit leo, at ullamcorper enim tristique eget. Sed dolor mauris, blandit nec diam nec, ultricies ultrices odio. Sed condimentum rhoncus odio, eget porta urna suscipit nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus quis pharetra metus, vulputate vulputate odio. Aliquam placerat dapibus justo, eu cursus est varius eu. Ut a tincidunt lorem. Proin felis massa, ultrices nec eros ut, sagittis accumsan ante. Sed ac faucibus lacus, at pharetra velit.
+
+
           </p>
         </div>
         <div class="col-md-4">
           <h2>Why Map the News?</h2>
           <p>
-            a bit about our research agenda around quant news analysis
+            a bit about our research agenda around quant news analysis Sed pharetra placerat dui eu accumsan. Phasellus luctus diam justo, et consectetur felis porta vitae. Vestibulum ullamcorper lacus non laoreet vulputate. Sed mollis, metus et sollicitudin gravida, turpis ante porttitor neque, sed interdum turpis quam quis neque. Aenean eget mattis elit. Quisque ut enim eu quam rutrum convallis sit amet sed sapien. Nullam ullamcorper ipsum sed velit consectetur, ac rhoncus quam dignissim.
           </p>
         </div>
         <div class="col-md-4">
           <h2>About this project</h2>
           <p>
-            more about us
+            more about us Sed pharetra placerat dui eu accumsan. Phasellus luctus diam justo, et consectetur felis porta vitae. Vestibulum ullamcorper lacus non laoreet vulputate. Sed mollis, metus et sollicitudin gravida, turpis ante porttitor neque, sed interdum turpis quam quis neque. Aenean eget mattis elit. Quisque ut enim eu quam rutrum convallis sit amet sed sapien. Nullam ullamcorper ipsum sed velit consectetur, ac rhoncus quam dignissim.
           </p>
         </div>
       </div>
@@ -81,17 +105,30 @@
 
     <!-- templates -->
     <script type="text/template" id="am-media-picker-template">
-      <div class="btn-group-vertical">
-      </div>
+      
+          <ul class="nav navbar-nav">
+          </ul>
+      
     </script>
     <script type="text/template" id="am-media-picker-item-template">
-      <%=name%>
+      <a href="#"><%=name%></a>
     </script>
     <script type="text/template" id="am-media-map-template">
-      <h3><%=name%></h3>
+      
       <div class="am-world-map"></div>
+      <h3><span class="media-source-name"><%=name%></span><br/><span class="media-source-date">Sept 2013</span></h3>
+      
     </script>
+    <script type="text/template" id="am-media-map-mouseover-template">
+      
+      
+        <h3><%=country%></h3>
+        <p><%=num_articles%> articles</p><p style="color:#cf6122">High attention</p>
 
+      
+      
+      
+    </script>
 
     <!-- all the JS includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" charset="utf-8"></script>

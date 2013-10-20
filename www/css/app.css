@@ -1,4 +1,15 @@
+body{
+	font-family: 'Noto Sans', sans-serif;
+}
+h1,h2,h3{
+	font-weight:700;
+	font-family: 'Noto Sans', sans-serif;
+}
 
+.am-media-map h3 {
+	bottom: 150px;
+	position: absolute;
+}
 #am-progress-bar {
 	position: absolute;
 	top: 200px;
@@ -16,4 +27,67 @@ footer {
 
 .am-content {
 	min-height: 400px;
+}
+.navbar-nav>li{
+	
+	border-left:1px solid #ccc;
+}
+.navbar-nav>li.active>a{
+
+	background-color: chocolate !important;
+	color: white !important;
+}
+.navbar-nav>li>a:hover{
+	background-color: chocolate !important;
+	color: white !important;
+}
+.navbar-nav>li:last-child{
+	border-right:1px solid #ccc;
+}
+.navbar-collapse{
+	padding-left: 0 !important;
+}
+#mouseover-info-window{
+	display: none;
+	position: absolute;
+	background-color:rgba(255,255,255,0.6);
+	border:1px solid #ccc;
+	padding:0 5px;
+	margin:0 !important;
+	border-radius: 4px;
+	-webkit-box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
+}
+#mouseover-info-window h3{
+	margin-top:5px;
+	margin-bottom:0;
+}
+#mouseover-info-window p{
+	margin-bottom:0;
+}
+.active{
+	stroke:chocolate;
+	stroke-width:1px;
+}
+.background {
+  fill: none;
+  pointer-events: all;
+}
+#country-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.navbar{
+	margin-bottom:0;
+}
+hr{
+	margin-top:0;
+	border-top:1px solid #ddd;
+}
+.am-world-map{
+	height:645px;
 }

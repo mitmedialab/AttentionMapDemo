@@ -7,9 +7,9 @@ window.App = {
         colors: {
             minColor: 'rgb(241,233,187)',
             maxColor: 'rgb(207,97,35)',
-            disabledColor: 'rgb(240, 240, 240)',
+            disabledColor: 'rgb(180, 180, 180)',
             enabledColor: 'rgb(243,195,99)',
-            outline: 'rgb(255,255,255)'
+            outline: 'rgb(100,100,100)'
         }
     },
 
@@ -57,6 +57,7 @@ window.App = {
         App.debug('Run App');
         $('#am-progress-bar').hide();
         App.globals.mediaPicker = new App.MediaPickerView({
+            'currentMediaId':1,
             'mediaSources': App.globals.allMediaSources.models
         });
         // create all the maps
