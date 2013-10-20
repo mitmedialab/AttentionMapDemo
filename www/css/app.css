@@ -66,8 +66,7 @@ footer {
 	margin-bottom:0;
 }
 .active{
-	stroke:chocolate;
-	stroke-width:1px;
+	/*use to style zoomed in country if we want */
 }
 .background {
   fill: none;
