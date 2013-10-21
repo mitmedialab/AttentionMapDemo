@@ -22,6 +22,7 @@ header h1{
 .am-media-map h3 {
 	bottom: 150px;
 	position: absolute;
+	padding-left:20px;
 
 }
 #am-progress-bar {

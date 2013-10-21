@@ -47,6 +47,9 @@ App.MediaMapView = Backbone.View.extend({
         var g = this.map.svg.select('g');
         var x, y, k;
         var that = this;
+        
+        this.mouseoverView.hide();
+
         if (country && this.map.selectedCountry !== country) {
             // zoom in on a country
             var path = App.globals.countryIdToPath[country.get('id')];
@@ -146,7 +149,7 @@ App.MediaMapView = Backbone.View.extend({
             .attr("data-id", function(d,i) {return d.id})
             .attr("d", function (d) { return that.map.path(App.globals.countryIdToPath[d.get('id')]); })
             .on("click", function (d) { return that.handleValidCountryClick(d); })
-            .on("mouseover", function (d) { return that.handleValidCountryMouseover(d); })
+            .on("mousemove", function (d) { return that.handleValidCountryMouseover(d); })
             .on("mouseout", function (d) { return that.handleValidCountryMouseout(d); });
         g.exit()
             .attr("class", "am-country")
@@ -245,8 +248,8 @@ App.MediaMapMouseoverView = Backbone.View.extend({
     },
     show: function(){
         var coord = d3.mouse(d3.select("svg").node());
-        d3.select(this.$el.get(0)).style("left", coord[0] + 15  + "px" );
-        d3.select(this.$el.get(0)).style("top", coord[1] + "px");
+        d3.select(this.$el.get(0)).style("left", coord[0] + 20  + "px" );
+        d3.select(this.$el.get(0)).style("top", coord[1] + 10 + "px");
         if (!this.$el.is(':visible')){this.$el.show()};
     }
 });
@@ -272,6 +275,7 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
         this.$el.html( content );
         $('.am-media-map h3').fadeOut();
         this.$el.fadeIn();
+
     },
     clear: function(){
         this.$el.empty();
