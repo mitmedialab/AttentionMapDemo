@@ -95,15 +95,7 @@ App.MediaMapView = Backbone.View.extend({
         g.append('g').attr('id', 'am-background');
         g.append('g').attr('id', 'am-data');
 
-        var world = App.globals.worldMap;
-
-        /*g.append("path")
-          .datum(topojson.mesh(world, world.objects.countries, function(a, b) { return a !== b; }))
-          .attr("id", "country-borders")
-          .attr("d", map.path);*/
-        
-      
-        //close zooming stuff
+        //end zooming stuff
         
         map.maxWeight = d3.max(this._getCurrentMediaSource().get("countries").models, function (d) { return d.get('count'); });
         map.color = d3.scale.linear()
@@ -123,6 +115,7 @@ App.MediaMapView = Backbone.View.extend({
             .attr("data-id",function(d){ return d.id })
             .attr('fill', App.config.colors.disabledColor)
             .attr('stroke', App.config.colors.outline)
+            .attr('stroke-width', 0.75)
             .attr("d", this.map.path);
 
     },
@@ -135,6 +128,8 @@ App.MediaMapView = Backbone.View.extend({
             .append("path")
             .attr("class", "am-country")
             .attr("fill", App.config.colors.disabledColor)
+            .attr('stroke', App.config.colors.outline)
+            .attr('stroke-width', 0.25)
             .attr("id", function(d,i) {return "am-country"+d.get('id')})
             .attr("data-id", function(d,i) {return d.id})
             .attr("d", function (d) { return that.map.path(App.globals.countryIdToPath[d.get('id')]); })
