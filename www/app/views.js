@@ -135,10 +135,11 @@ App.MediaMapView = Backbone.View.extend({
             .on("mouseout", function (d) { return that.handleValidCountryMouseout(d); });
         g.exit()
             .attr("class", "am-country")
-            .transition()
+            .transition().duration(1500)
             .style("fill-opacity", 1e-6)
             .remove();
         g.transition()
+            .duration(1500)
             .attr("fill", function (d) {return that.map.color(d.get('count'));} );
         
     },
