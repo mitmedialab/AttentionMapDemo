@@ -94,7 +94,8 @@ header h1{
 }
 
 .am-world-map{
-	height:645px;
+	height:620px;
+	overflow: hidden;
 }
 footer{
 	border-top: 1px solid #111;
