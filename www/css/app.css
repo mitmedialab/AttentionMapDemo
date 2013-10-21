@@ -73,6 +73,11 @@ header h1{
 }
 #mouseover-info-window p{
 	margin-bottom:0;
+
+}
+.shadow{
+	text-shadow: 1px 1px 1px #333;
+	filter: dropshadow(color=#333, offx=, offy=1);
 }
 .active{
 	/*use to style zoomed in country if we want */
