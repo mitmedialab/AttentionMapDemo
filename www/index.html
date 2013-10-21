@@ -35,7 +35,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-12">
-              <a href="http://civic.mit.edu/" class="pull-right"><img src="img/c4cm-badge.gif" alt="MIT Center for Civic Media"/></a>
+              <a href="http://civic.mit.edu/" class="pull-right"><img src="img/c4cm-badge2.gif" alt="MIT Center for Civic Media" style="height:50px"/></a>
               <h1>The World According To...</h1>
           </div>
         </div>
@@ -120,7 +120,8 @@
     </script>
     <script type="text/template" id="am-media-map-mouseover-template">
         <h3><%=country%></h3>
-        <p><%=num_articles%> articles</p><p style="color:#cf6122">High attention</p>
+        <p><%=num_articles%> articles</p>
+        <p><span class="shadow" style="<%=country_color%>" ><%=attention%></span></p>
 
     </script>
     <!-- all the JS includes -->

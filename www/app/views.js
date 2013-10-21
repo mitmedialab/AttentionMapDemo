@@ -94,9 +94,9 @@ App.MediaMapView = Backbone.View.extend({
         //end zooming stuff
         
         map.maxWeight = d3.max(this._getCurrentMediaSource().get("countries").models, function (d) { return d.get('count'); });
-        map.color = d3.scale.linear()
+        map.color = d3.scale.log()
             .range([App.config.colors.minColor, App.config.colors.maxColor])
-            .domain([0, map.maxWeight]);
+            .domain([1, map.maxWeight]);
         map.opacity = d3.scale.pow().exponent(2)
             .range([0, 1])
             .domain([0, map.maxWeight]);
@@ -207,10 +207,16 @@ App.MediaMapMouseoverView = Backbone.View.extend({
         this.render();
     },
     render: function(){
-        var country = this.options.country.get('alpha3')
+        var country = this.options.country.get('alpha3');
+        var fill = $('#am-data>.am-country[data-id="'+this.options.country.id+'"]').attr("fill");
+        
+        var count = this.options.country.get('count');
         var content = this.template({
             country: this.options.country.get('name'),
-            num_articles: this.options.country.get('count')
+            num_articles: count,
+            attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
+            country_color: "color:"+fill
+
         });
         this.$el.html( content );
         this.show();
