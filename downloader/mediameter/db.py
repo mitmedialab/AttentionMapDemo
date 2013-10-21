@@ -56,7 +56,8 @@ class ParseableStoryDatabase(MongoStoryDatabase):
         mapper = Code("""
                function () {
                  var countryCode = '"""+country_alpha2+"""';
-                 if( this.meta.primaryCountries.indexOf(countryCode) > -1 ){
+                 var mediaId = '"""+media_id+"""';
+                 if( (this.media_id==mediaId) && (this.meta.primaryCountries.indexOf(countryCode) > -1) ){
                    for(var idx in this.meta.people){
                      var name = this.meta.people[idx]['name'];
                      emit(name, 1);
