@@ -24,7 +24,11 @@ App.MediaMapView = Backbone.View.extend({
         App.debug("Changing to media id "+mediaId);
     	this.options.currentMediaId = mediaId;
         this._renderMapCountries();
-        $('.media-source-name').html(this._getCurrentMediaSource().get('mediaName'));
+        $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
+        /*$('.media-source-name').animate({'opacity': 0.1}, 1000, function () {
+          $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
+        }).animate({'opacity': 1}, 1000);*/
+        
     },
 	_getMediaId: function(){
 		return this._getCurrentMediaSource().get('mediaId');
