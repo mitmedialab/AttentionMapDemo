@@ -5,12 +5,11 @@ App.MediaMapView = Backbone.View.extend({
 	template: _.template($('#am-media-map-template').html()),
 	initialize: function(){
 		this.id = "am-media-map-"+this._getMediaId();
-		_.bindAll(this, 'changeMediaId')
+		_.bindAll(this, 'changeMediaId', 'handleValidCountryClick')
  		App.globals.eventMgr.bind("changeMediaSource", this.changeMediaId);
         // init with first media source
         this.options.currentMediaId = this.options.mediaSources.at(0).get('mediaId');
         this.render();
-        this.centered = 0;
 	},
 	render: function(){
 		var content = this.template({
@@ -33,33 +32,30 @@ App.MediaMapView = Backbone.View.extend({
     _getCurrentMediaSource: function(){
         return this.options.mediaSources.get(this.options.currentMediaId);
     },
-    handleValidCountryClick: function(d) {
-        
-        var g = App.globals.mediaMap.map.svg.select('g');
+    handleValidCountryClick: function(country) {
+        var g = this.map.svg.select('g');
         var x, y, k;
-
-      if (d && App.globals.mediaMap.centered !== d) {
-        var path = App.globals.countryIdToPath[d.get('id')];
-        var centroid = App.globals.mediaMap.map.path.centroid(path.geometry);
-        x = centroid[0];
-        y = centroid[1];
-        k = 4;
-        App.globals.mediaMap.centered = d;
-      } else {
-        x = App.globals.mediaMap.map.width / 2;
-        y = App.globals.mediaMap.map.height / 2;
-        k = 1;
-        App.globals.mediaMap.centered = null;
-      }
-      
-      g.selectAll("path").classed("active", App.globals.mediaMap.centered && function(d) { return d === App.globals.mediaMap.centered; });
-
-      g.transition()
-          .duration(750)
-          .attr("transform", "translate(" + App.globals.mediaMap.map.width / 2 + "," + App.globals.mediaMap.map.height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-
-          .style("stroke-width", 1 / k + "px");
-        
+        var that = this;
+        if (country && this.map.selectedCountry !== country) {
+            // zoom in on a country
+            var path = App.globals.countryIdToPath[country.get('id')];
+            var centroid = App.globals.mediaMap.map.path.centroid(path.geometry);
+            x = centroid[0];
+            y = centroid[1];
+            k = 4;
+            this.map.selectedCountry = country;
+        } else {
+            // zoom out again
+            x = App.globals.mediaMap.map.width / 2;
+            y = App.globals.mediaMap.map.height / 2;
+            k = 1;
+            this.map.selectedCountry = null;
+        }
+        g.selectAll("path").classed("active", this.map.selectedCountry && function(country) { return country === that.map.selectedCountry; });
+        g.transition()
+            .duration(750)
+            .attr("transform", "translate(" + this.map.width / 2 + "," + this.map.height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+            .style("stroke-width", 1 / k + "px");
     },
     _initMap: function(){
         var width = 1170;
@@ -85,7 +81,7 @@ App.MediaMapView = Backbone.View.extend({
 
 
         //zooming stuff
-         map.svg.append("rect")
+        map.svg.append("rect")
             .attr("class", "background")
             .attr("width", map.width)
             .attr("height", map.height)
@@ -104,6 +100,7 @@ App.MediaMapView = Backbone.View.extend({
         map.opacity = d3.scale.pow().exponent(2)
             .range([0, 1])
             .domain([0, map.maxWeight]);
+        map.selectedCountry = null;
         this.map = map;	// save all the map stuff on this object
 	},
     _renderMapBackground: function() {
