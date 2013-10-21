@@ -264,15 +264,16 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
         var fill = $('#am-data>.am-country[data-id="'+this.options.country.id+'"]').attr("fill");
         
         var count = this.options.country.get('count');
+        var peopleNames = _.map( this.options.country.get('people'), function(item){ return item['name'];}).join(", ");
         var content = this.template({
             country: this.options.country.get('name'),
-            num_articles: count,
-            media_source: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
+            numArticles: count,
+            mediaSource: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
             attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
             country_color: "color:"+fill,
-            people: this.options.country.get('people')
+            people: peopleNames
         });
-        App.debug(this.options.country.get('people'))
+        App.debug()
         this.$el.html( content );
         $('.am-media-map h3').fadeOut();
         this.$el.fadeIn();
