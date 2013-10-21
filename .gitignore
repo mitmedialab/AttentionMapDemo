@@ -1,4 +1,3 @@
-
 downloader/downloader.config
 
 downloader/duplicateWork/StorySubset.pyc
@@ -16,3 +15,4 @@ downloader/duplicateWork/story_utils.py
 www/us.json
 
 www/zoom.html
+downloader/output/*.json
