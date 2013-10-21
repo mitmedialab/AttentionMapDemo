@@ -134,9 +134,12 @@ App.MediaMapView = Backbone.View.extend({
             .on("mouseover", function (d) { return that.handleValidCountryMouseover(d); })
             .on("mouseout", function (d) { return that.handleValidCountryMouseout(d); });
         g.exit()
+            .attr("class", "am-country")
+            .transition()
+            .style("fill-opacity", 1e-6)
             .remove();
         g.transition()
-            .attr("fill", function (d) {return that.map.color(d.get('count'));} ).duration(1500);
+            .attr("fill", function (d) {return that.map.color(d.get('count'));} );
         
     },
     handleValidCountryMouseover: function(country) {
