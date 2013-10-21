@@ -134,7 +134,7 @@ App.MediaMapView = Backbone.View.extend({
             .attr("data-id", function(d,i) {return d.id})
             .attr("d", function (d) { return that.map.path(App.globals.countryIdToPath[d.get('id')]); })
             .on("click", function (d) { return that.handleValidCountryClick(d); })
-            .on("mousemove", function (d) { return that.handleValidCountryMouseover(d); })
+            .on("mouseover", function (d) { return that.handleValidCountryMouseover(d); })
             .on("mouseout", function (d) { return that.handleValidCountryMouseout(d); });
         g.exit()
             .remove();
