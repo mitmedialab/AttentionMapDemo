@@ -52,6 +52,42 @@ class ParseableStoryDatabase(MongoStoryDatabase):
         raw_results = self._db.stories.group(key, condition, initial, reduce);
         return self._resultsToDict(raw_results,'meta.primaryCountries')
 
+    def peopleMentioned(self, media_id, country_alpha2=None):
+        mapper = Code("""
+               function () {
+                 var countryCode = '"""+country_alpha2+"""';
+                 if( this.meta.primaryCountries.indexOf(countryCode) > -1 ){
+                   for(var idx in this.meta.people){
+                     var name = this.meta.people[idx]['name'];
+                     emit(name, 1);
+                    }
+                 }
+               }
+               """)
+        reducer = Code("""
+                function (key, values) {
+                  var total = 0;
+                  for (var i = 0; i < values.length; i++) {
+                    total += values[i];
+                  }
+                  return total;
+                }
+                """)
+        results = self._db.stories.map_reduce(mapper,reducer, "peopleMentionedInMediaCountry")
+        docs = []
+        for doc in results.find():
+            docs.append(doc)
+        return self._resultsToDict(docs,'_id')   
+
+    def mediaStories(self, media_id, country_alpha2=None):
+        criteria = { 'media_id': media_id }
+        if country_alpha2 is not None:
+            criteria = {'meta.primaryCountries': country_alpha2}
+        docs = []
+        for doc in self._db.stories.find(criteria):
+            docs.append(doc)
+        return docs
+
     # assumes key is integer!
     def _resultsToDict(self, raw_results, id_key):
         ''' 

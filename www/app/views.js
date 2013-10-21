@@ -269,9 +269,10 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
             num_articles: count,
             media_source: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
             attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
-            country_color: "color:"+fill
-
+            country_color: "color:"+fill,
+            people: this.options.country.get('people')
         });
+        App.debug(this.options.country.get('people'))
         this.$el.html( content );
         $('.am-media-map h3').fadeOut();
         this.$el.fadeIn();

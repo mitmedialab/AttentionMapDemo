@@ -4,7 +4,7 @@ import xml.etree.ElementTree
 class Lucene():
 
     SENTENCES_PER_PAGE = 1000
-    FAKE = False
+    FAKE = True
 
     def __init__(self, start_date, end_date, media_id):
         self.log = logging.getLogger('mediameter')
@@ -68,24 +68,41 @@ class Lucene():
             )   
 
     def _query_lucene(self, rows=0, start=None):
+        params = self._get_query_params(rows)
+        if start is not None:
+            params['start'] = start
+        query = urllib.urlencode(params)
+        url = 'http://mcquery1.media.mit.edu:8983/solr/collection1/select?%s' % (query)
+        self.log.info("Querying Lucene Select: "+url)
+        if not self.FAKE:
+            return urllib2.urlopen(url).read()
+        return None
+
+    def _get_query_params(self, rows=0):
         # http://lucene.apache.org/core/2_9_4/queryparsersyntax.html
-        params = {
+        return {
                 'q':'*'
                 , 'fq': self._get_fq()
                 , 'rows':rows
                 , 'df':'sentence'
             }
-        if start is not None:
-            params['start'] = start
-        query = urllib.urlencode(params)
-        url = 'http://mcquery1.media.mit.edu:8983/solr/collection1/select?%s' % (query)
-        self.log.info("Querying Lucene: "+url)
-        if not self.FAKE:
-            return urllib2.urlopen(url).read()
-        return None
 
     def _file_to_string(self, file_path):
         str = None
         with open(file_path, "r") as myfile:
             str = ' '.join([line.replace('\n', '') for line in myfile.readlines()])
         return str
+
+    def get_term_frequency(self):
+        '''
+        I only used this to generate the URLs, not get the actual results (which are in json)
+        '''
+        params = self._get_query_params()
+        query = urllib.urlencode(params)
+        url = 'http://mcquery1.media.mit.edu:8080/wc?%s' % (query)
+        print("Querying Lucene Word Count: "+url)
+        if not self.FAKE:
+            return urllib2.urlopen(url).read()
+        return None
+
+    
