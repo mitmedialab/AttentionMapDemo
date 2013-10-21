@@ -57,11 +57,11 @@ window.App = {
         App.debug('Run App');
         $('#am-progress-bar').hide();
         App.globals.mediaPicker = new App.MediaPickerView({
-            'currentMediaId':1,
+            'currentMediaId':App.globals.allMediaSources.models[0].id,
             'mediaSources': App.globals.allMediaSources.models
         });
         // create all the maps
-        App.globals.mediaMap = new App.MediaMapView({'currentMediaId':1, 'mediaSources':App.globals.allMediaSources});
+        App.globals.mediaMap = new App.MediaMapView({'currentMediaId':App.globals.allMediaSources.models[0].id, 'mediaSources':App.globals.allMediaSources});
         $('#am-media-map').append(App.globals.mediaMap.el);
         // about click handler
         $('#am-about-link').click(function(){
