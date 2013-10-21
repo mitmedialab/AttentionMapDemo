@@ -25,6 +25,13 @@ App.MediaMapView = Backbone.View.extend({
     	this.options.currentMediaId = mediaId;
         this._renderMapCountries();
         $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
+        
+        /* CSD - CHANGE AND PUT THIS SOMEWHERE ELSE MORE BACKBONEY??? */
+        this.map.selectedCountry = this._getCurrentMediaSource().attributes.countries._byId[this.map.selectedCountry.id];
+
+        this.countryFocus = new App.MediaMapCountryFocusView({
+                'country': this.map.selectedCountry,
+        });
         /*$('.media-source-name').animate({'opacity': 0.1}, 1000, function () {
           $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
         }).animate({'opacity': 1}, 1000);*/
@@ -48,12 +55,16 @@ App.MediaMapView = Backbone.View.extend({
             y = centroid[1];
             k = 4;
             this.map.selectedCountry = country;
+            this.countryFocus = new App.MediaMapCountryFocusView({
+                'country': country,
+            });
         } else {
             // zoom out again
             x = App.globals.mediaMap.map.width / 2;
             y = App.globals.mediaMap.map.height / 2;
             k = 1;
             this.map.selectedCountry = null;
+            this.countryFocus.clear();
         }
         g.selectAll("path").classed("active", this.map.selectedCountry && function(country) { return country === that.map.selectedCountry; });
         g.transition()
@@ -116,7 +127,7 @@ App.MediaMapView = Backbone.View.extend({
             .attr("data-id",function(d){ return d.id })
             .attr('fill', App.config.colors.disabledColor)
             .attr('stroke', App.config.colors.outline)
-            .attr('stroke-width', 0.75)
+            .attr('stroke-width', 0.5)
             .attr("d", this.map.path);
 
     },
@@ -130,7 +141,7 @@ App.MediaMapView = Backbone.View.extend({
             .attr("class", "am-country")
             .attr("fill", App.config.colors.disabledColor)
             .attr('stroke', App.config.colors.outline)
-            .attr('stroke-width', 0.25)
+            .attr('stroke-width', 0.5)
             .attr("id", function(d,i) {return "am-country"+d.get('id')})
             .attr("data-id", function(d,i) {return d.id})
             .attr("d", function (d) { return that.map.path(App.globals.countryIdToPath[d.get('id')]); })
@@ -222,7 +233,7 @@ App.MediaMapMouseoverView = Backbone.View.extend({
         var content = this.template({
             country: this.options.country.get('name'),
             num_articles: count,
-            attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
+            attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : (count > App.globals.mediaMap.map.maxWeight/100) ? "Medium Attention" : "Lower Attention"),
             country_color: "color:"+fill
 
         });
@@ -238,4 +249,34 @@ App.MediaMapMouseoverView = Backbone.View.extend({
         d3.select(this.$el.get(0)).style("top", coord[1] + "px");
         if (!this.$el.is(':visible')){this.$el.show()};
     }
+});
+App.MediaMapCountryFocusView = Backbone.View.extend({
+    el: $("#country-focus"),
+    template: _.template($('#country-focus-template').html()),
+    initialize: function(){
+        this.render();
+    },
+    render: function(){
+        var country = this.options.country.get('alpha3');
+        var fill = $('#am-data>.am-country[data-id="'+this.options.country.id+'"]').attr("fill");
+        
+        var count = this.options.country.get('count');
+        var content = this.template({
+            country: this.options.country.get('name'),
+            num_articles: count,
+            media_source: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
+            attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
+            country_color: "color:"+fill
+
+        });
+        this.$el.html( content );
+        $('.am-media-map h3').fadeOut();
+        this.$el.fadeIn();
+    },
+    clear: function(){
+        this.$el.empty();
+        this.$el.hide();
+        $('.am-media-map h3').fadeIn();
+    }
+   
 });

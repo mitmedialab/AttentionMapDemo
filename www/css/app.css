@@ -1,7 +1,7 @@
 body{
 	font-family: 'Noto Sans', sans-serif;
 }
-h1,h2,h3{
+h1,h2,h3,h4{
 	font-weight:700;
 	font-family: 'Noto Sans', sans-serif;
 }
@@ -15,9 +15,14 @@ header h1{
 	filter: dropshadow(color=#333, offx=, offy=1);
 	margin-bottom: 20px;
 }
+.am-media-map{
+	border-right:1px solid #e6e6e6;
+	border-left:1px solid #e6e6e6;
+}
 .am-media-map h3 {
 	bottom: 150px;
 	position: absolute;
+
 }
 #am-progress-bar {
 	position: absolute;
@@ -67,6 +72,25 @@ header h1{
 	-webkit-box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
 	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
+#country-focus{
+	display:none;
+	width: 260px;
+	height:100%;
+	position: absolute;
+	padding:0 5px;
+	margin:0 !important;
+	background-color:rgba(255,255,255,0.7);
+	top:0;
+	border:0;
+	-webkit-box-shadow: 2px 0px 2px 2px rgba(0, 0, 0, 0.3);
+	box-shadow: 2px 0px 2px 2px rgba(0, 0, 0, 0.3);
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+}
+#country-focus h4{
+	padding-top: 20px;
+}
 #mouseover-info-window h3{
 	margin-top:5px;
 	margin-bottom:0;
@@ -115,7 +139,11 @@ footer h2{
 	filter: dropshadow(color=#333, offx=, offy=1);
 	margin-bottom:20px;
 }
-html{
-	margin:0;
-	padding:0;
+#headlines p{
+	font-size:11.5px;
+	margin-bottom:2px;
+
+}
+#headlines a{
+	color:#a15e33;
 }

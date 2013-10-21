@@ -70,6 +70,7 @@
         <div class="col-md-12">
           <div id="mouseover-info-window"></div>
           <div id='am-media-map'></div>
+          <div id='country-focus'></div>
           
           
         </div>
@@ -112,10 +113,25 @@
     <script type="text/template" id="am-media-picker-item-template">
       <a href="#"><%=name%></a>
     </script>
+    <script type="text/template" id="country-focus-template">
+      <h3>How <%=media_source%> covers <%=country%></h3>
+        <p><%=num_articles%> articles</p>
+        <p><span class="shadow" style="<%=country_color%>" ><%=attention%></span></p>
+      <h4>People</h4>
+      <p>Ghenghis Khan, Lady Gaga, David Raymond, Rahul, Ed Platt, Joe Schmoe <br/> <button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span> more</button></p>
+      <h4>Keywords</h4>
+      <p>juniper, winifred, lemon, chocolate, plants, autumn, frogs, lovely <br/><button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span> more</button></p>
+      <h4>Headlines</h4>
+      <div id="headlines"><p class="stripe"><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2012/03/08/newton-school-budget-proposal-includes-percent-increase/Dr6mlRwektMjPXNojQwrkK/story.html">School budget proposal includes 4.1 percent increase</a></p><p><a target="_blank" href="http://www.bostonglobe.com/metro/obituaries/2013/06/17/jacob-canick-newton-brown-university-professor-advanced-research-prenatal-screening/JizbEIHqtLKg2nih4HLgYP/story.html">Jacob Canick; advanced research in prenatal screening</a></p><p class="stripe page1"><a target="_blank" href="http://www.bostonglobe.com/metro/2013/05/24/site-botox-shots-chilled-towels-what-makes-person-join-one-tony-gym-over-another/JASDdhka4CtwSCsfus6NDO/story.html">Battle for the bulge</a></p><p><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2012/05/30/globe-west-best-bets/sWXoGCQ7b16umsiYqNWTPI/story.html">Globe West: Best Bets</a></p><p class="stripe"><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2012/09/08/corner-kicks/aeiJ6UJFY7NgaLShLc7bXL/story.html">CORNER KICKS</a></p><p><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2012/11/30/newton-voters-will-likely-get-vote-million-tax-increase-march/qmfUDFO060CztURi0RzNaK/story.html">Aldermen to vote on overrides</a></p><p class="stripe"><a target="_blank" href="http://www.boston.com/news/local/massachusetts/2013/09/11/newton-police-secretary-files-state-suit-against-mayor-setti-warren/cv1WrGZ8JNjAmFNvD7R5FO/story.html">Newton police secretary adds state lawsuit against mayor</a></p><p><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2013/06/29/engine-developers-hits-press-with-homeless-plan-waban-plan-snag-homeless-facility-newton-hits-snag-proposal-for-homeless-facility-newton/00G7dwSuO60XO4vApxJzMJ/story.html">Group vows push for Waban units, despite mayors stance</a></p><p class="stripe"><a target="_blank" href="http://www.bostonglobe.com/business/2013/07/25/tripadvisor-earnings-rise-stock-gains/5G3NGu3M10kCqC2EKhV8WJ/story.html">TripAdvisor earnings rise, stock gains</a></p><p><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2013/07/06/newton-lee-ford-nets-all-america-honors-skidmore/cYYUMyGCAhKXopJS3XdY0K/story.html">Newtons Lee Ford earns All-America honors in tennis</a></p><p class="stripe page1"><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2013/03/03/wenewton/msVikZu3JZkagG3z3UghvM/story.html">Tax plan relying on early figures</a></p><p><a target="_blank" href="http://www.bostonglobe.com/arts/2011/12/15/bargain-bin-column-for/Am44PsyyIAEbCHCkXwQtEI/story.html">Clothing, accessories at Lux Couture</a></p><p class="stripe"><a target="_blank" href="http://www.bostonglobe.com/metro/regionals/west/2013/03/16/wenewton/sEMQt0TFzizeQxOk0s3uPO/story.html">Newton making lists after tax hike passes</a></p></div>
+    </script>
     <script type="text/template" id="am-media-map-template">
       
       <div class="am-world-map"></div>
-      <h3><span class="media-source-name"><%=name%></span><br/><span class="media-source-date">Sept 2013</span></h3>
+      <h3>
+        
+        <span class="media-source-name"><%=name%></span><br/>
+        <span class="media-source-date">Sept 2013</span>
+      </h3>
       
     </script>
     <script type="text/template" id="am-media-map-mouseover-template">
