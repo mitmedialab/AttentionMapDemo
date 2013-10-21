@@ -142,8 +142,6 @@ App.MediaMapView = Backbone.View.extend({
             .attr("fill", function (d) {return that.map.color(d.get('count'));} ).duration(1500);
         
     },
-    
-    
     handleValidCountryMouseover: function(country) {
         if (this.mouseoverView == null || country!=this.mouseoverView.options.country){
             this.mouseoverView = new App.MediaMapMouseoverView({
