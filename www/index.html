@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>Attention Map</title>
+    <title>How do they see the world?</title>
 
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/ico/apple-touch-icon-114-precomposed.png">
@@ -36,7 +36,7 @@
       <div class="row">
         <div class="col-md-12">
             <a href="http://civic.mit.edu/" class="pull-right"><img src="img/c4cm-badge.gif" alt="MIT Center for Civic Media"/></a>
-            <h1>Attention Map</h1>
+            <h1>The World According To...</h1>
         </div>
       </div>
       
@@ -76,9 +76,8 @@
       </div>
     </div>
 
-    <hr />
-
-    <footer class="container" id="about">
+    <footer id="about">
+      <div class="container">
       <div class="row">
         <div class="col-md-4">
           <h2>Mapping Global Attention</h2>
@@ -101,8 +100,8 @@
           </p>
         </div>
       </div>
+    </div>
     </footer>
-
     <!-- templates -->
     <script type="text/template" id="am-media-picker-template">
       
@@ -120,16 +119,10 @@
       
     </script>
     <script type="text/template" id="am-media-map-mouseover-template">
-      
-      
         <h3><%=country%></h3>
         <p><%=num_articles%> articles</p><p style="color:#cf6122">High attention</p>
 
-      
-      
-      
     </script>
-
     <!-- all the JS includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" charset="utf-8"></script>
       <!--<script src="lib/jquery-1.10.2.min.js" charset="utf-8"></script>-->
@@ -149,8 +142,6 @@
     <script src="app/routes.js" charset="utf-8"></script>
     <script src="app/models.js" charset="utf-8"></script>
     <script src="app/views.js" charset="utf-8"></script>
-
     <script>$(function(){ App.initialize(); });</script>
-
   </body>
 </html>
