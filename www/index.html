@@ -68,11 +68,9 @@
     <div class="container am-content">
       <div class="row">
         <div class="col-md-12">
-          <div id="mouseover-info-window"></div>
+          <div id="am-mouseover-info-window"></div>
           <div id='am-media-map'></div>
-          <div id='country-focus'></div>
-          
-          
+          <div id='am-country-focus'></div>
         </div>
       </div>
     </div>
@@ -113,15 +111,14 @@
     <script type="text/template" id="am-media-picker-item-template">
       <a href="#"><%=name%></a>
     </script>
-    <script type="text/template" id="country-focus-template">
+    <script type="text/template" id="am-country-focus-template">
       <h3>How <%=mediaSource%> covers <%=country%></h3>
         <p><%=numArticles%> articles</p>
         <p><span class="shadow" style="<%=country_color%>" ><%=attention%></span></p>
       <h4>Top People</h4>
       <p><%=people%></p>
       <h4>Keywords</h4>
-      <p>juniper, winifred, lemon, chocolate, plants, autumn, frogs, lovely <br/><button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span> more</button></p>
-      
+      <p><%=keywords%></p>
     </script>
     <script type="text/template" id="am-media-map-template">
       

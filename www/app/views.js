@@ -231,7 +231,7 @@ App.MediaPickerItemView = Backbone.View.extend({
 });
 
 App.MediaMapMouseoverView = Backbone.View.extend({
-    el: $("#mouseover-info-window"),
+    el: $("#am-mouseover-info-window"),
     template: _.template($('#am-media-map-mouseover-template').html()),
     initialize: function(){
         this.render();
@@ -262,8 +262,8 @@ App.MediaMapMouseoverView = Backbone.View.extend({
     }
 });
 App.MediaMapCountryFocusView = Backbone.View.extend({
-    el: $("#country-focus"),
-    template: _.template($('#country-focus-template').html()),
+    el: $("#am-country-focus"),
+    template: _.template($('#am-country-focus-template').html()),
     initialize: function(){
         this.render();
     },
@@ -283,36 +283,44 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
         } else {
             country = country.get('alpha3');
             var fill = $('#am-data>.am-country[data-id="'+this.options.country.id+'"]').attr("fill");
-            
-            var count = this.options.country.get('count');
+            var articleCount = this.options.country.get('count');
+            // assemble html for list of people
             var peopleCountMax = d3.max(this.options.country.get('people'), function(d) { return d.count; });
-            var fontSizeScale = d3.scale.linear()
+            var peopleFontSizeScale = d3.scale.linear()
                 .range([10, 24])
                 .domain([1, peopleCountMax]);
             var peopleHash = this.options.country.get('peopleHash');
-            var peopleNames = _.map( this.options.country.get('people'), 
+            var peopleHtml = _.map( this.options.country.get('people'), 
                 function(item){ 
-                    var peopleHtml;
-
+                    var html;
                     if (item['name'].indexOf(" ") > 2 ){
-                        peopleHtml = '<span style="font-size:'+ fontSizeScale(item['count']) +'px"><a target="_blank" href="http://en.wikipedia.org/wiki/'+ item['name'].replace(" ", "_") +'">'+ item['name'] + '</a></span>';
+                        html = '<span style="font-size:'+ peopleFontSizeScale(item['count']) +'px"><a target="_blank" href="http://en.wikipedia.org/wiki/'+ item['name'].replace(" ", "_") +'">'+ item['name'] + '</a></span>';
                     } else{
-                        peopleHtml = '<span style="font-size:'+ fontSizeScale(item['count']) +'px">'+ item['name'] + '</span>';
+                        html = '<span style="font-size:'+ peopleFontSizeScale(item['count']) +'px">'+ item['name'] + '</span>';
                     }
-                    
-                    return peopleHtml;
+                    return html;
                 }).join(", ");
+            // assemble html for list of keywords
+            var keywordCountMax = d3.max(this.options.country.get('tfidf'), function(d) { return d.count; });
+            var keywordCountMin = d3.min(this.options.country.get('tfidf'), function(d) { return d.count; });
+            var keywordFontSizeScale = d3.scale.linear()
+                .range([10, 24])
+                .domain([keywordCountMin, keywordCountMax]);
+            var keywordHtml = _.map( this.options.country.get('tfidf'), 
+                function(item){
+                    return '<span style="font-size:'+ keywordFontSizeScale(item['count']) +'px">'+ item['term'] + '</span>';
+                }).join(", ");
+            // render
             var content = this.template({
                 country: this.options.country.get('name'),
-                numArticles: count,
+                numArticles: articleCount,
                 mediaSource: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
-                attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
+                attention: ((articleCount > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
                 country_color: "color:"+fill,
-                people: peopleNames
+                people: peopleHtml,
+                keywords: keywordHtml
             });
         }
-        
-        App.debug()
         this.$el.html( content );
         $('.am-media-map h3').fadeOut();
         this.$el.fadeIn();

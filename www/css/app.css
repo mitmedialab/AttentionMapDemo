@@ -62,7 +62,7 @@ header h1{
 .navbar-collapse{
 	padding-left: 0 !important;
 }
-#mouseover-info-window{
+#am-mouseover-info-window{
 	display: none;
 	position: absolute;
 	background-color:rgba(255,255,255,0.6);
@@ -73,7 +73,7 @@ header h1{
 	-webkit-box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
 	box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
-#country-focus{
+#am-country-focus{
 	display:none;
 	width: 260px;
 	height:100%;
@@ -89,14 +89,14 @@ header h1{
 	overflow-y: scroll;
 
 }
-#country-focus h4{
+#am-country-focus h4{
 	padding-top: 20px;
 }
-#mouseover-info-window h3{
+#am-mouseover-info-window h3{
 	margin-top:5px;
 	margin-bottom:0;
 }
-#mouseover-info-window p{
+#am-mouseover-info-window p{
 	margin-bottom:0;
 
 }

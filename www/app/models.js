@@ -40,8 +40,8 @@ App.Country = Backbone.Model.extend({
             'name':ISO3166.getNameFromAlpha3(args['alpha3']),
             'centroid':Centroid.fromAlpha3(args['alpha3']),
             'pct': args['count'] / args['totalMediaArticles'],
-            'people':peopleResult
-            
+            'people': peopleResult,
+            'tfidf': {}
         });
     }
 });
