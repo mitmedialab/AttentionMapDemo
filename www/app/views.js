@@ -84,13 +84,14 @@ App.MediaMapView = Backbone.View.extend({
             .style("stroke-width", 1 / k + "px");
     },
     _initMap: function(){
-        var width = 1170;
-        var height = 645;
+        var parentWidth = $('#am-media-map').width();
+        var width = parentWidth;
+        var height = width/1.8;
         var map = {
 			'container': this.$('.am-world-map').get()[0],
         	'width': width,
        		'height': height,
-            'scale': 225,
+            'scale': width/5.2,
         	'projection': null,
         	'svg': null,
         	'maxWeight': null,
