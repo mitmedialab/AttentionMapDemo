@@ -27,10 +27,18 @@ App.MediaMapView = Backbone.View.extend({
         $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
         
         /* CSD - CHANGE AND PUT THIS SOMEWHERE ELSE MORE BACKBONEY??? */
-        this.map.selectedCountry = this._getCurrentMediaSource().attributes.countries._byId[this.map.selectedCountry.id];
+        if(this.map.selectedCountry != null){
+            this.map.selectedCountryID = this.map.selectedCountry.id; 
+            this.map.selectedCountryName = this.map.selectedCountry.get('name'); 
+        }
+
+        this.map.selectedCountry = this._getCurrentMediaSource().attributes.countries._byId[this.map.selectedCountryID];
+        
 
         this.countryFocus = new App.MediaMapCountryFocusView({
                 'country': this.map.selectedCountry,
+                'name':this.map.selectedCountryName,
+
         });
         /*$('.media-source-name').animate({'opacity': 0.1}, 1000, function () {
           $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
@@ -260,19 +268,53 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
         this.render();
     },
     render: function(){
-        var country = this.options.country.get('alpha3');
-        var fill = $('#am-data>.am-country[data-id="'+this.options.country.id+'"]').attr("fill");
+        var country = this.options.country;
+        if (country == null){
+            country = App.globals.mediaMap.selectedCountry;
+            var content = this.template({
+                country: this.options.name,
+                numArticles: 0,
+                mediaSource: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
+                attention: "No attention",
+                country_color: "color:#666",
+                people: "No people data available"
+            });
+
+        } else {
+            country = country.get('alpha3');
+            var fill = $('#am-data>.am-country[data-id="'+this.options.country.id+'"]').attr("fill");
+            
+            var count = this.options.country.get('count');
+            var peopleCountMax = d3.max(this.options.country.get('people'), function(d) { return d.count; });
+            var fontSizeScale = d3.scale.linear()
+                .range([10, 24])
+                .domain([1, peopleCountMax]);
+            var peopleHash = this.options.country.get('peopleHash');
+            var peopleNames = _.map( _.keys(this.options.country.get('peopleHash')), 
+                function(item){ 
+                    item = peopleHash[item];
+                    var peopleHtml;
+                    
+                    
+                    
+                    if (item['name'].indexOf(" ") > 2 ){
+                        peopleHtml = '<span style="font-size:'+ fontSizeScale(item['count']) +'px"><a target="_blank" href="http://en.wikipedia.org/wiki/'+ item['name'].replace(" ", "_") +'">'+ item['name'] + '</a></span>';
+                    } else{
+                        peopleHtml = '<span style="font-size:'+ fontSizeScale(item['count']) +'px">'+ item['name'] + '</span>';
+                    }
+                    
+                    return peopleHtml;
+                }).join(", ");
+            var content = this.template({
+                country: this.options.country.get('name'),
+                numArticles: count,
+                mediaSource: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
+                attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
+                country_color: "color:"+fill,
+                people: peopleNames
+            });
+        }
         
-        var count = this.options.country.get('count');
-        var peopleNames = _.map( this.options.country.get('people'), function(item){ return item['name'];}).join(", ");
-        var content = this.template({
-            country: this.options.country.get('name'),
-            numArticles: count,
-            mediaSource: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
-            attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
-            country_color: "color:"+fill,
-            people: peopleNames
-        });
         App.debug()
         this.$el.html( content );
         $('.am-media-map h3').fadeOut();
