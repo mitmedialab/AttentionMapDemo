@@ -12,6 +12,8 @@ import string, math
 
 DO_IF_IDF = False
 
+start_time = time.time()
+
 config = ConfigParser.ConfigParser()
 config.read('downloader.config')
 
@@ -21,9 +23,10 @@ db = ParseableStoryDatabase(config.get('mongo','db_name'),config.get('mongo','ho
 output = []	# the thing to jsonify at the end
 
 # get list of all media sources
+print "Starting to generate json"
 media_counts = db.storyCountByMediaSource()
 for media_id_str, story_count in media_counts.iteritems():
-	print "Working on media "+media_id_str
+	print "  Working on media "+media_id_str
 	info = {
 		'mediaId': int(media_id_str),
 		#'articleCount': story_count,
@@ -32,7 +35,7 @@ for media_id_str, story_count in media_counts.iteritems():
 
 	# setup tfidf computation
 	if DO_IF_IDF:
-		print "  Setting up media text collection"
+		print "    Setting up media text collection"
 		text_by_country = {}
 		for country_code, count in db.storyCountByCountry(media_id_str).iteritems():
 			country_stories = db.mediaStories(media_id_str, country_code)
@@ -40,10 +43,10 @@ for media_id_str, story_count in media_counts.iteritems():
 			country_text = nltk.Text([word.encode('utf-8') for sent in sent_tokenize(country_stories_text.lower()) for word in word_tokenize(sent)])
 			text_by_country[country_code] = country_text
 		text_collection = nltk.TextCollection(text_by_country.values())
-		print "    done"
+		print "      done"
 
 	# now create results we care about
-	print "  Computing aggregate info"
+	print "    Computing info for each country"
 	count_by_country = []
 	parsed_article_count = 0
 	for country_code, count in db.storyCountByCountry(media_id_str).iteritems():
@@ -56,13 +59,13 @@ for media_id_str, story_count in media_counts.iteritems():
 			country_stopwords.append( country_iso3166.name.lower() )
 		except KeyError:
 			# not sure how to handle things that aren't fully approved, like XK for Kosovo :-(
-			print 'Unknown country code '+country_code
+			print '      Unknown country code '+country_code
 			country_alpha3 = None			
 		
 		if DO_IF_IDF:
 			# compute document term frequency for stories about this country from this media source
 			tfidf = {}
-			print "    Calculating tfidf for country "+country_code
+			print "      Calculating tfidf for country "+country_code
 			for term in text_collection.vocab().keys():
 				print term
 				print stopwords.words('english')
@@ -88,5 +91,8 @@ for media_id_str, story_count in media_counts.iteritems():
 	info['articleCount'] = parsed_article_count
 	output.append(info)
 
+print "Writing output"
 with open("output/data.json", "w") as text_file:
     text_file.write(json.dumps(output))
+
+print "  done (in "+str(time.time() - start_time)+" seconds)"
