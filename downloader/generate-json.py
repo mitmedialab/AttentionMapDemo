@@ -37,11 +37,11 @@ def add_idf(idf, term, count):
 # get list of all media sources
 print "Starting to generate json"
 media_counts = db.storyCountByMediaSource()
-for media_id_str, story_count in media_counts.iteritems():
+for media_id_str, media_story_count in media_counts.iteritems():
 	print "  Working on media "+media_id_str
 	info = {
 		'mediaId': int(media_id_str),
-		'totalArticleCount': story_count,
+		'totalArticleCount': media_story_count,
 		'mediaName': mediacloud.api.mediaSource(media_id_str)['name']
 	}
 
@@ -54,6 +54,12 @@ for media_id_str, story_count in media_counts.iteritems():
 		country_counts = db.storyCountByCountry(media_id_str)
 		total_countries = len(country_counts)
 		for country_code, count in country_counts.iteritems():
+			country_stopwords = []
+			try:
+				country_iso3166 = countries.get(country_code)
+				country_stopwords.append( country_iso3166.name.lower() )
+			except KeyError:
+				country_stopwords = []	
 			# fetch and put back together the stories
 			print "      fetch "+country_code,
 			country_stories = db.mediaStories(media_id_str, country_code)
@@ -65,7 +71,7 @@ for media_id_str, story_count in media_counts.iteritems():
 			doc = nltk.Text([ \
 				word.encode('utf-8') \
 					for sent in sent_tokenize(country_stories_text.lower()) for word in word_tokenize(sent) \
-					if word not in english_stop_words and word not in string.punctuation])
+					if word not in english_stop_words and word not in string.punctuation and word not in country_stopwords])
 			# compute the document tf 
 			print "doc tf ",
 			doc_term_count = len(doc.vocab().keys())
@@ -85,19 +91,18 @@ for media_id_str, story_count in media_counts.iteritems():
 	print "    Computing info for each country"
 	count_by_country = []
 	parsed_article_count = 0
-	for country_code, count in db.storyCountByCountry(media_id_str).iteritems():
+	for country_code, country_story_count in db.storyCountByCountry(media_id_str).iteritems():
+
 		# setup country-specific info
 		country_alpha3 = None
-		country_stopwords = []
 		try:
 			country_iso3166 = countries.get(country_code)
 			country_alpha3 = country_iso3166.alpha3
-			country_stopwords.append( country_iso3166.name.lower() )
 		except KeyError:
 			# not sure how to handle things that aren't fully approved, like XK for Kosovo :-(
 			print '      Unknown country code '+country_code
 			country_alpha3 = None			
-		
+
 		tfidf_results = []
 		if DO_IF_IDF:
 			# compute document term frequency for stories about this country from this media source
@@ -112,13 +117,13 @@ for media_id_str, story_count in media_counts.iteritems():
 		# put country-specific info together
 		if country_alpha3 is not None:
 			all_people_counts = db.peopleMentioned(media_id_str, country_code)
-			people_counts = [ { 'name': name, 'count':count } \
-				for name, count in sorted(all_people_counts.iteritems(), key=operator.itemgetter(1), reverse=True)]\
+			people_counts = [ { 'name': name, 'count':freq } \
+				for name, freq in sorted(all_people_counts.iteritems(), key=operator.itemgetter(1), reverse=True)]\
 				[:30]
 			count_by_country.append({
-				'alpha3': country_alpha3, 'count': count, 'people': people_counts, 'tfidf': tfidf_results
+				'alpha3': country_alpha3, 'count': country_story_count, 'people': people_counts, 'tfidf': tfidf_results
 			})
-			parsed_article_count += count
+			parsed_article_count += country_story_count
 
 	info['countries'] = count_by_country
 	info['articleCount'] = parsed_article_count
