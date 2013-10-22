@@ -140,3 +140,7 @@ footer h2{
 	margin-bottom:20px;
 }
 
+footer a:hover,
+footer a {
+	color: #f2e8c7;
+}

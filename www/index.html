@@ -79,23 +79,22 @@
       <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <h2>Mapping Global Attention</h2>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin faucibus, tellus sed lacinia venenatis, neque metus vestibulum mauris, sed consectetur dui dolor id nisi. Duis sed laoreet tellus. Aenean lorem ante, ultrices non condimentum vitae, accumsan sit amet dui. Cras faucibus ultrices tortor lacinia vehicula. Etiam risus quam, dictum et pulvinar quis, ornare sit amet nibh. Maecenas pharetra interdum nisl, at venenatis mi pulvinar ac. Donec varius neque sit amet sem sollicitudin, sed elementum felis porta. Integer facilisis suscipit leo, at ullamcorper enim tristique eget. Sed dolor mauris, blandit nec diam nec, ultricies ultrices odio. Sed condimentum rhoncus odio, eget porta urna suscipit nec. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus quis pharetra metus, vulputate vulputate odio. Aliquam placerat dapibus justo, eu cursus est varius eu. Ut a tincidunt lorem. Proin felis massa, ultrices nec eros ut, sagittis accumsan ante. Sed ac faucibus lacus, at pharetra velit.
-
-
-          </p>
-        </div>
-        <div class="col-md-4">
           <h2>Why Map the News?</h2>
           <p>
-            a bit about our research agenda around quant news analysis Sed pharetra placerat dui eu accumsan. Phasellus luctus diam justo, et consectetur felis porta vitae. Vestibulum ullamcorper lacus non laoreet vulputate. Sed mollis, metus et sollicitudin gravida, turpis ante porttitor neque, sed interdum turpis quam quis neque. Aenean eget mattis elit. Quisque ut enim eu quam rutrum convallis sit amet sed sapien. Nullam ullamcorper ipsum sed velit consectetur, ac rhoncus quam dignissim.
+            Media attention matters - in quantity and quality. It helps determine what we talk about as a public and how we talk about it. This project tracks where media sources attention goes and what that attention looks like across different countries in combination with diverse data sets like population and income.
           </p>
         </div>
         <div class="col-md-4">
-          <h2>About this project</h2>
+          <h2>How does this Work?</h2>
           <p>
-            more about us Sed pharetra placerat dui eu accumsan. Phasellus luctus diam justo, et consectetur felis porta vitae. Vestibulum ullamcorper lacus non laoreet vulputate. Sed mollis, metus et sollicitudin gravida, turpis ante porttitor neque, sed interdum turpis quam quis neque. Aenean eget mattis elit. Quisque ut enim eu quam rutrum convallis sit amet sed sapien. Nullam ullamcorper ipsum sed velit consectetur, ac rhoncus quam dignissim.
+            We start by pulling articles from the <a href="http://mediacloud.org/">MediaCloud</a> database.  We pass those through an augmented version of the <a href="http://clavin.bericotechnologies.com">CLAVIN</a> geoparsing package to find mentions of places.  We also use the <a href="http://nlp.stanford.edu/software/CRF-NER.shtml">Stanford Named Entity Recognizer</a> to pull out mentions of people.  We run <a href="http://en.wikipedia.org/wiki/Tf–idf">TF-IDF</a> on the words in the articles to make the word cloud of "keywords" that are used more in each country.
+          </p>
+
+        </div>
+        <div class="col-md-4">
+          <h2>Where is this Going?</h2>
+          <p>
+            We are building out our ability to algorithmicly detect the who, what, and where of online news.  We are incrementally improving our entity detection, topic modeling, and geoparsing to add that metadata back to the enormous corpus of news held in the  <a href="http://mediacloud.org/">MediaCloud</a> database.  With that additional data we'll be able to deliver a whole new level of understanding of how attention works in online news.
           </p>
         </div>
       </div>
