@@ -2,6 +2,8 @@
 App.Country = Backbone.Model.extend({
     initialize: function(args){
         var peopleHash = new Object();
+        var people = new Array();
+        var peopleResult;
         if (args['people']){
             
             _.each(args['people'], function(person){
@@ -23,6 +25,14 @@ App.Country = Backbone.Model.extend({
                 if (!contained)
                     peopleHash[person.name] = person;
             });
+            _.each(_.keys(peopleHash), function(item){ 
+                people.push(peopleHash[item]); 
+            });
+            peopleResult = _.sortBy(people, 
+                        function(item){
+                            return item.count;
+                        });
+            peopleResult.reverse();
         }
         this.set({
             'id':ISO3166.getIdFromAlpha3(args['alpha3']),
@@ -30,8 +40,8 @@ App.Country = Backbone.Model.extend({
             'name':ISO3166.getNameFromAlpha3(args['alpha3']),
             'centroid':Centroid.fromAlpha3(args['alpha3']),
             'pct': args['count'] / args['totalMediaArticles'],
-            'people':args['people'],
-            'peopleHash':peopleHash
+            'people':peopleResult
+            
         });
     }
 });

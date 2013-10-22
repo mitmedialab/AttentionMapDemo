@@ -290,13 +290,10 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
                 .range([10, 24])
                 .domain([1, peopleCountMax]);
             var peopleHash = this.options.country.get('peopleHash');
-            var peopleNames = _.map( _.keys(this.options.country.get('peopleHash')), 
+            var peopleNames = _.map( this.options.country.get('people'), 
                 function(item){ 
-                    item = peopleHash[item];
                     var peopleHtml;
-                    
-                    
-                    
+
                     if (item['name'].indexOf(" ") > 2 ){
                         peopleHtml = '<span style="font-size:'+ fontSizeScale(item['count']) +'px"><a target="_blank" href="http://en.wikipedia.org/wiki/'+ item['name'].replace(" ", "_") +'">'+ item['name'] + '</a></span>';
                     } else{
