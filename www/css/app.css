@@ -140,11 +140,4 @@ footer h2{
 	filter: dropshadow(color=#333, offx=, offy=1);
 	margin-bottom:20px;
 }
-#headlines p{
-	font-size:11.5px;
-	margin-bottom:2px;
 
-}
-#headlines a{
-	color:#a15e33;
-}
