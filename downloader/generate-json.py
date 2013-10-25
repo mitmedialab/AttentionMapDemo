@@ -46,8 +46,8 @@ for media_id_str, media_story_count in media_counts.iteritems():
 	}
 
 	# setup tfidf computation
-	doc_by_country = {}			# maps alpha2 to country nltk.Text
-	term_doc_incidence = {}		# maps term to number of country nltk.Text's it appears in
+	doc_by_country = {}			# maps alpha2 to document (country nltk.Text)
+	term_doc_incidence = {}		# maps term to number of documents (country nltk.Text) it appears in
 	idf = {}					# maps term to inverse document frequency
 	if DO_IF_IDF:
 		print "    Computing TF and IDF"
