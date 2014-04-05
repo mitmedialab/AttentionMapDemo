@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<response>
-<lst name="responseHeader"><int name="status">0</int><int name="QTime">15</int><lst name="params"><str name="df">sentence</str><str name="q">*</str><str name="fq">publish_date:[20
-13-09-01T00:00:00Z TO 2013-09-02T00:00:00Z] AND +media_id:1</str><str name="rows">0</str></lst></lst><result name="response" numFound="3900" start="0"></result>
-</response>
