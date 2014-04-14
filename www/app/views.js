@@ -8,23 +8,23 @@ App.MediaMapView = Backbone.View.extend({
 		_.bindAll(this, 'changeMediaId', 'handleValidCountryClick')
  		App.globals.eventMgr.bind("changeMediaSource", this.changeMediaId);
         // init with first media source
-        this.options.currentMediaId = this.options.mediaSources.at(0).get('mediaId');
+        this.options.currentMediaId = this.options.mediaSources.at(0).get('mediaType');
         this.render();
 	},
 	render: function(){
 		var content = this.template({
-			name: this._getCurrentMediaSource().get('mediaName')
+			name: this._getCurrentMediaSource().get('name')
 		});
         this.$el.html( content );	// need to do this *before* adding the map so the d3.select works right
         this._initMap();
         this._renderMapBackground();
         this._renderMapCountries();
     },
-    changeMediaId: function(mediaId){
-        App.debug("Changing to media id "+mediaId);
-    	this.options.currentMediaId = mediaId;
+    changeMediaId: function(mediaType){
+        App.debug("Changing to media id "+mediaType);
+    	this.options.currentMediaId = mediaType;
         this._renderMapCountries();
-        $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
+        $('.media-source-name').text(this._getCurrentMediaSource().get('name'));
         
         /* CSD - CHANGE AND PUT THIS SOMEWHERE ELSE MORE BACKBONEY??? */
         if(this.map.selectedCountry != null){
@@ -34,19 +34,17 @@ App.MediaMapView = Backbone.View.extend({
 
         this.map.selectedCountry = this._getCurrentMediaSource().attributes.countries._byId[this.map.selectedCountryID];
         
+        if(this.map.selectedCountry != null){
+            this.countryFocus = new App.MediaMapCountryFocusView({
+                    'country': this.map.selectedCountry,
+                    'name':this.map.selectedCountryName,
 
-        this.countryFocus = new App.MediaMapCountryFocusView({
-                'country': this.map.selectedCountry,
-                'name':this.map.selectedCountryName,
-
-        });
-        /*$('.media-source-name').animate({'opacity': 0.1}, 1000, function () {
-          $('.media-source-name').text(this._getCurrentMediaSource().get('mediaName'));
-        }).animate({'opacity': 1}, 1000);*/
+            });
+        }
         
     },
 	_getMediaId: function(){
-		return this._getCurrentMediaSource().get('mediaId');
+		return this._getCurrentMediaSource().get('mediaType');
 	},
     _getCurrentMediaSource: function(){
         return this.options.mediaSources.get(this.options.currentMediaId);
@@ -216,18 +214,18 @@ App.MediaPickerItemView = Backbone.View.extend({
     },
     render: function(){
 		var content = this.template({
-			id: this.options.mediaSource.get('mediaId'),
-			name: this.options.mediaSource.get('mediaName')
+			id: this.options.mediaSource.get('mediaType'),
+			name: this.options.mediaSource.get('name')
 		});
         this.$el.attr('type','button');
         this.$el.html( content );
     },
     handleClick: function(){
-    	var mediaId = this.options.mediaSource.get('mediaId');
+    	var mediaType = this.options.mediaSource.get('mediaType');
         this.$el.addClass('active');
         this.$el.siblings().removeClass('active')
-    	App.debug("switch to media "+mediaId);
-    	App.globals.eventMgr.trigger("changeMediaSource",mediaId);
+    	App.debug("switch to media "+mediaType);
+    	App.globals.eventMgr.trigger("changeMediaSource",mediaType);
     }
 });
 
@@ -275,7 +273,8 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
             var content = this.template({
                 country: this.options.name,
                 numArticles: 0,
-                mediaSource: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
+                mediaType: App.globals.mediaMap._getCurrentMediaSource().get('mediaType'),
+                name: App.globals.mediaMap._getCurrentMediaSource().get('name'),
                 attention: "No attention",
                 country_color: "color:#666",
                 people: "No people data available"
@@ -315,7 +314,8 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
             var content = this.template({
                 country: this.options.country.get('name'),
                 numArticles: articleCount,
-                mediaSource: App.globals.mediaMap._getCurrentMediaSource().get('mediaName'),
+                mediaType: App.globals.mediaMap._getCurrentMediaSource().get('mediaType'),
+                name: App.globals.mediaMap._getCurrentMediaSource().get('name'),
                 attention: ((articleCount > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
                 country_color: "color:"+fill,
                 people: peopleHtml,

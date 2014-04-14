@@ -144,3 +144,8 @@ footer a:hover,
 footer a {
 	color: #f2e8c7;
 }
+#inset-map{
+	position:absolute;
+	top:0;
+	left:0;
+}

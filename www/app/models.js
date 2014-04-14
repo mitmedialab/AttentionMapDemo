@@ -61,12 +61,17 @@ App.MediaSource = Backbone.Model.extend({
         this.set({
             'startDate': Date.parse(args['startDate']),
             'endDate': Date.parse(args['endDate']),
-            'id': args['mediaId']
+            'id': args['mediaType'],
+            'name': this.toTitleCase("Top 20 " + args['mediaType']),
+
         });
         for(index in args['countries']){
             args['countries'][index]['totalMediaArticles'] = args['articleCount'];
         }
         this.set( {'countries': new App.CountryCollection(args['countries']) });
+    },
+    toTitleCase: function (str){
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
 });
 
