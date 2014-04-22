@@ -269,8 +269,10 @@ App.MediaMapMouseoverView = Backbone.View.extend({
     },
     show: function(){
         var coord = d3.mouse(d3.select("svg").node());
-        d3.select(this.$el.get(0)).style("left", coord[0] + 20  + "px" );
-        d3.select(this.$el.get(0)).style("top", coord[1] + 10 + "px");
+       
+        var offset = ($(window).width() - $("svg").width())/2;
+        d3.select(this.$el.get(0)).style("left", coord[0] + 10 + offset + "px" );
+        d3.select(this.$el.get(0)).style("top", coord[1] + 12 + "px");
         if (!this.$el.is(':visible')){this.$el.show()};
     }
 });
