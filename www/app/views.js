@@ -73,6 +73,7 @@ App.MediaMapView = Backbone.View.extend({
             y = App.globals.mediaMap.map.height / 2;
             k = 1;
             this.map.selectedCountry = null;
+            this.map.selectedCountryID = null;
             this.countryFocus.clear();
         }
         g.selectAll("path").classed("active", this.map.selectedCountry && function(country) { return country === that.map.selectedCountry; });
