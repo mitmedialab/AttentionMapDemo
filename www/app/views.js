@@ -307,10 +307,14 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
             var keywordFontSizeScale = d3.scale.linear()
                 .range([10, 24])
                 .domain([keywordCountMin, keywordCountMax]);
-            var keywordHtml = _.map( this.options.country.get('tfidf'), 
-                function(item){
-                    return '<span style="font-size:'+ keywordFontSizeScale(item['count']) +'px">'+ item['term'] + '</span>';
+            //filter keywords for messiness like quotes & dashes
+            var keywordHtml = _.map( _.filter(this.options.country.get('tfidf'), function(item){
+                    var k = item["term"];
+                    return k!= "”" && k!=" " && k !=" ``"&& k !="``" && k != "''" && k !="'s" && k != "--" && k != "n't" && k !="—";
+            } ), function(item){
+                        return '<span style="font-size:'+ keywordFontSizeScale(item['count']) +'px">'+ item['term'] + '</span>';
                 }).join(", ");
+
             // render
             var content = this.template({
                 country: this.options.country.get('name'),
