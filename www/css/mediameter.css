@@ -102,7 +102,17 @@ body {
     text-decoration: none;
 }
 /* Attention Map specific ****************************************************/
-
+#am-progress-bar {
+    z-index: 1000;
+    position: absolute;
+    top: 250px;
+    left: 35%;
+    width: 30%;
+}
+#am-progress-bar h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
 .am-media-map{
     border-right:1px solid #e6e6e6;
     border-left:1px solid #e6e6e6;
@@ -112,16 +122,6 @@ body {
     position: absolute;
     padding-left:20px;
 
-}
-#am-progress-bar {
-    position: absolute;
-    top: 200px;
-    left: 400px;
-    width: 400px;
-}
-#am-progress-bar h2 {
-    text-align: center;
-    margin-bottom: 15px;
 }
 
 .am-content {
