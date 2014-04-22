@@ -38,7 +38,7 @@ window.App = {
         App.globals.allMediaSources = new App.MediaSourceCollection();
         // kick off all async loading
         App.globals.allMediaSources.fetch({
-            url: "data/geostudy-data.json",
+            url: "data/real-data.json",
             success: runApp
         });
         d3.json('data/world-110m.json', function(data){

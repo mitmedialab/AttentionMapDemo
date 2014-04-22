@@ -85,6 +85,7 @@ App.MediaMapView = Backbone.View.extend({
         var parentWidth = $('#am-media-map').width();
         var width = parentWidth;
         var height = width/1.8;
+        this.$('.am-world-map').height(height);
         var map = {
 			'container': this.$('.am-world-map').get()[0],
         	'width': width,
@@ -294,9 +295,9 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
                 function(item){ 
                     var html;
                     if (item['name'].indexOf(" ") > 2 ){
-                        html = '<span style="font-size:'+ peopleFontSizeScale(item['count']) +'px"><a target="_blank" href="http://en.wikipedia.org/wiki/'+ item['name'].replace(" ", "_") +'">'+ item['name'] + '</a></span>';
+                        html = '<span style="font-size:'+ peopleFontSizeScale(item['count']) +'px"><a target="_blank" href="http://en.wikipedia.org/wiki/'+ item['name'].replace(" ", "_") +'">'+ item['name'].replace("+"," ") + '</a></span>';
                     } else{
-                        html = '<span style="font-size:'+ peopleFontSizeScale(item['count']) +'px">'+ item['name'] + '</span>';
+                        html = '<span style="font-size:'+ peopleFontSizeScale(item['count']) +'px">'+ item['name'].replace("+"," ") + '</span>';
                     }
                     return html;
                 }).join(", ");
