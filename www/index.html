@@ -1,108 +1,103 @@
 <!DOCTYPE html>
 <html>
+    <head>
+        <title>Media Meter: GeoParallax</title>
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:300,700" type="text/css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/mediameter.css" media="screen">
+        <!--<link rel="stylesheet" href="css/app.css" media="screen">-->
+        
+       
+    </head>
+    <body>
+        <div class="header">
+           
+            <div class="branding">
+                <div class="container">
+                    
+                    <img class="logo" src="img/mm-logo-blue.png"><h1><strong>Media Meter</strong> GeoParallax </h1>
+                </div>
+            </div>
+            
 
-  <head>
-    <title>How do they see the world?</title>
-
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/ico/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/ico/apple-touch-icon-114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/ico/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="img/ico/apple-touch-icon-57-precomposed.png">
-    <link href='http://fonts.googleapis.com/css?family=Noto+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="shortcut icon" href="img/ico/favicon.png">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:image" content="img/thumb.png" />
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-     
-    <link rel="stylesheet" href="css/app.css" media="screen">
-    
-  </head>
-
-  <body>
-
-    <div id="am-progress-bar" class="panel panel-default">
-      <div class="panel-body">
-        <h2>Loading...</h2>
-        <div class="progress progress-striped active">
-          <div class="progress-bar" role="progressbar" style="width: 100%"></div>
+            
         </div>
-      </div>
-    </div>
+        <div class="drawer">
+            <div class="container">
+                <nav class="navbar navbar-default" role="navigation">
+                <div class="container" style="padding-left:0">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  
+                </div>
 
-    <header>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-              <a href="http://civic.mit.edu/" class="pull-right"><img src="img/c4cm-badge2.gif" alt="MIT Center for Civic Media" style="height:50px"/></a>
-              <h1>GeoParallax</h1>
-              <h2>How Different News Sources See Differently</h2>
-          </div>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                 
+                 <div class="collapse navbar-collapse navbar-ex1-collapse" style="padding-left:0">
+                  <div id='am-media-picker'><!-- nav item views go here --></div>
+                 
+                </div><!-- /.navbar-collapse -->
+              </div>
+            </nav>
+            </div>
         </div>
-      </div>
-    </header>
-    <nav class="navbar navbar-default" role="navigation">
-        <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          
+       
+        <div class="content">
+            <div class="container am-content">
+               <div id="am-mouseover-info-window"></div>
+              <div id='am-media-map'></div>
+              <div id='am-country-focus'></div>
+            </div>
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-         
-         <div class="collapse navbar-collapse navbar-ex1-collapse">
-          <div id='am-media-picker'><!-- nav item views go here --></div>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#" id="am-about-link">About the project</a></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div>
-      </nav>
-
-    <div class="container am-content">
-      <div class="row">
-        <div class="col-md-12">
-          <div id="am-mouseover-info-window"></div>
-          <div id='am-media-map'></div>
-          <div id='am-country-focus'></div>
+        <footer>
+        <div class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h3>About GeoParallax</h3>
+                          <p>
+                            This tool shows you four different views of the world. It maps the top 20 English language news sources for four types of media: newspapers, broadcast, magazine and online (digital native). Our goal is to discover the which news medium has the most comprehensive global coverage, where the blind spots are, and to discover how different types of media cover different countries. This is an exploratory analysis for a research paper.
+                          </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>About Media Meter</h3>
+                          <p>
+                            Media Meter is a suite of tools that track media attention across the Internet. Media attention matters - in quantity and quality. It helps determine what we talk about as a public and how we talk about it. This project tracks where media sources' attention goes and what that attention looks like across different countries in combination with diverse data sets like population and income. 
+                          </p>
+                        
+                    </div>
+                    <div class="col-sm-4">
+                        <h3>How does this Work?</h3>
+                          <p>
+                            We are building out our ability to algorithmically detect the who, what, and where of online news. We start by pulling articles from the <a href="http://mediacloud.org/">MediaCloud</a> database.  We pass those through an augmented version of the <a href="http://clavin.bericotechnologies.com">CLAVIN</a> geoparsing package to find mentions of places.  We also use the <a href="http://nlp.stanford.edu/software/CRF-NER.shtml">Stanford Named Entity Recognizer</a> to pull out mentions of people.  We run <a href="http://en.wikipedia.org/wiki/Tf–idf">TF-IDF</a> on the words in the articles to make the word cloud of "keywords" that are used more in each country.
+                         </p>
+                         
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                       
+                    </div>
+                    <div class="col-sm-4">
+                        
+                        
+                    </div>
+                    <div class="col-sm-4">
+                         <a href="http://civic.mit.edu"><img src="img/civic.png" style="margin-top:20px;vertical-align:bottom"></a> <span style="margin-left:20px">Questions? <a href="http://civic.mit.edu/contact">Get in touch</a>.</span>
+                         
+                    </div>
+                </div>
+                
+            </div>
         </div>
-      </div>
-    </div>
-
-    <footer id="about">
-      <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h2>Why Map the News?</h2>
-          <p>
-            Media attention matters - in quantity and quality. It helps determine what we talk about as a public and how we talk about it. This project tracks where media sources attention goes and what that attention looks like across different countries in combination with diverse data sets like population and income.
-          </p>
-        </div>
-        <div class="col-md-4">
-          <h2>How does this Work?</h2>
-          <p>
-            We start by pulling articles from the <a href="http://mediacloud.org/">MediaCloud</a> database.  We pass those through an augmented version of the <a href="http://clavin.bericotechnologies.com">CLAVIN</a> geoparsing package to find mentions of places.  We also use the <a href="http://nlp.stanford.edu/software/CRF-NER.shtml">Stanford Named Entity Recognizer</a> to pull out mentions of people.  We run <a href="http://en.wikipedia.org/wiki/Tf–idf">TF-IDF</a> on the words in the articles to make the word cloud of "keywords" that are used more in each country.
-          </p>
-
-        </div>
-        <div class="col-md-4">
-          <h2>Where is this Going?</h2>
-          <p>
-            We are building out our ability to algorithmicly detect the who, what, and where of online news.  We are incrementally improving our entity detection, topic modeling, and geoparsing to add that metadata back to the enormous corpus of news held in the  <a href="http://mediacloud.org/">MediaCloud</a> database.  With that additional data we'll be able to deliver a whole new level of understanding of how attention works in online news.
-          </p>
-        </div>
-      </div>
-    </div>
     </footer>
-   <!-- <div id="inset-map"><img src="img/insetmap.png">-->
-  </div>
-    <!-- templates -->
+     <!-- templates -->
     <script type="text/template" id="am-media-picker-template">
       
           <ul class="nav navbar-nav">
@@ -127,7 +122,7 @@
       <h3>
         
         <span class="media-source-name"><%=name%></span><br/>
-        <span class="media-source-date">March 2014</span>
+        <span class="media-source-date">April 2014</span>
       </h3>
       
     </script>
@@ -137,12 +132,11 @@
         <p><span class="shadow" style="<%=country_color%>" ><%=attention%></span></p>
 
     </script>
-    <!-- all the JS includes -->
+        <!-- all the JS includes -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" charset="utf-8"></script>
-      
     <script src="lib/underscore-min.js" charset="utf-8"></script>
     <script src="lib/backbone-min.js" charset="utf-8"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="lib/bootstrap.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="http://d3js.org/d3.geo.projection.v0.min.js" charset="utf-8"></script>
     <script src="lib/topojson.v1.min.js" charset="utf-8"></script>
@@ -154,5 +148,5 @@
     <script src="app/models.js" charset="utf-8"></script>
     <script src="app/views.js" charset="utf-8"></script>
     <script>$(function(){ App.initialize(); });</script>
-  </body>
+    </body>
 </html>

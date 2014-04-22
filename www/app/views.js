@@ -180,7 +180,19 @@ App.MediaMapView = Backbone.View.extend({
     },
     handleValidCountryMouseout: function(country) {
         this.mouseoverView.hide()
-    }
+    },
+    addCommas: function(nStr)
+    {
+      nStr += '';
+      x = nStr.split('.');
+      x1 = x[0];
+      x2 = x.length > 1 ? '.' + x[1] : '';
+      var rgx = /(\d+)(\d{3})/;
+      while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+      }
+      return x1 + x2;
+    },
 });
 
 App.MediaPickerView = Backbone.View.extend({
@@ -243,7 +255,7 @@ App.MediaMapMouseoverView = Backbone.View.extend({
         var count = this.options.country.get('count');
         var content = this.template({
             country: this.options.country.get('name'),
-            num_articles: count,
+            num_articles: App.globals.mediaMap.addCommas(count),
             attention: ((count > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : (count > App.globals.mediaMap.map.maxWeight/100) ? "Medium Attention" : "Lower Attention"),
             country_color: "color:"+fill
 
@@ -310,7 +322,7 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
             //filter keywords for messiness like quotes & dashes
             var keywordHtml = _.map( _.filter(this.options.country.get('tfidf'), function(item){
                     var k = item["term"];
-                    return k!= "”" && k!=" " && k !=" ``"&& k !="``" && k != "''" && k !="'s" && k != "--" && k != "n't" && k !="—";
+                    return k!= "–" && k!="•" && k!= "”" && k!=" " && k !=" ``"&& k !="``" && k != "''" && k !="'s" && k != "--" && k != "n't" && k !="—";
             } ), function(item){
                         return '<span style="font-size:'+ keywordFontSizeScale(item['count']) +'px">'+ item['term'] + '</span>';
                 }).join(", ");
@@ -318,7 +330,7 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
             // render
             var content = this.template({
                 country: this.options.country.get('name'),
-                numArticles: articleCount,
+                numArticles: App.globals.mediaMap.addCommas(articleCount),
                 mediaType: App.globals.mediaMap._getCurrentMediaSource().get('mediaType'),
                 name: App.globals.mediaMap._getCurrentMediaSource().get('name'),
                 attention: ((articleCount > App.globals.mediaMap.map.maxWeight/10) ? "Higher attention" : "Lower Attention"),
@@ -336,6 +348,7 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
         this.$el.empty();
         this.$el.hide();
         $('.am-media-map h3').fadeIn();
-    }
+    },
+    
    
 });

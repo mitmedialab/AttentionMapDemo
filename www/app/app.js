@@ -62,12 +62,8 @@ window.App = {
         // create all the maps
         App.globals.mediaMap = new App.MediaMapView({'currentMediaId':App.globals.allMediaSources.models[0].id, 'mediaSources':App.globals.allMediaSources});
         $('#am-media-map').append(App.globals.mediaMap.el);
-        // about click handler
-        $('#am-about-link').click(function(){
-            $('html, body').animate({
-                scrollTop: $("footer").offset().top
-            }, 1000);
-        })
-    }
+        
+    },
+
 
 };
