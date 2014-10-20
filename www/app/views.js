@@ -1,28 +1,28 @@
 
 App.MediaMapView = Backbone.View.extend({
-	tagName: 'div',
-	className: 'am-media-map',
-	template: _.template($('#am-media-map-template').html()),
-	initialize: function(){
-		this.id = "am-media-map-"+this._getMediaId();
-		_.bindAll(this, 'changeMediaId', 'handleValidCountryClick')
- 		App.globals.eventMgr.bind("changeMediaSource", this.changeMediaId);
+    tagName: 'div',
+    className: 'am-media-map',
+    template: _.template($('#am-media-map-template').html()),
+    initialize: function(){
+        this.id = "am-media-map-"+this._getMediaId();
+        _.bindAll(this, 'changeMediaId', 'handleValidCountryClick')
+         App.globals.eventMgr.bind("changeMediaSource", this.changeMediaId);
         // init with first media source
         this.options.currentMediaId = this.options.mediaSources.at(0).get('mediaType');
         this.render();
-	},
-	render: function(){
-		var content = this.template({
-			name: this._getCurrentMediaSource().get('name')
-		});
-        this.$el.html( content );	// need to do this *before* adding the map so the d3.select works right
+    },
+    render: function(){
+        var content = this.template({
+            name: this._getCurrentMediaSource().get('name')
+        });
+        this.$el.html( content );    // need to do this *before* adding the map so the d3.select works right
         this._initMap();
         this._renderMapBackground();
         this._renderMapCountries();
     },
     changeMediaId: function(mediaType){
         App.debug("Changing to media id "+mediaType);
-    	this.options.currentMediaId = mediaType;
+        this.options.currentMediaId = mediaType;
         this._renderMapCountries();
         $('.media-source-name').text(this._getCurrentMediaSource().get('name'));
         
@@ -43,9 +43,9 @@ App.MediaMapView = Backbone.View.extend({
         }
         
     },
-	_getMediaId: function(){
-		return this._getCurrentMediaSource().get('mediaType');
-	},
+    _getMediaId: function(){
+        return this._getCurrentMediaSource().get('mediaType');
+    },
     _getCurrentMediaSource: function(){
         return this.options.mediaSources.get(this.options.currentMediaId);
     },
@@ -88,15 +88,15 @@ App.MediaMapView = Backbone.View.extend({
         var height = width/1.8;
         this.$('.am-world-map').height(height);
         var map = {
-			'container': this.$('.am-world-map').get()[0],
-        	'width': width,
-       		'height': height,
+            'container': this.$('.am-world-map').get()[0],
+            'width': width,
+               'height': height,
             'scale': width/5.2,
-        	'projection': null,
-        	'svg': null,
-        	'maxWeight': null,
-        	'color': null,
-        	'opacity': null
+            'projection': null,
+            'svg': null,
+            'maxWeight': null,
+            'color': null,
+            'opacity': null
         };
         map.projection = d3.geo.kavrayskiy7()
             .scale(map.scale)
@@ -128,8 +128,8 @@ App.MediaMapView = Backbone.View.extend({
             .range([0, 1])
             .domain([0, map.maxWeight]);
         map.selectedCountry = null;
-        this.map = map;	// save all the map stuff on this object
-	},
+        this.map = map;    // save all the map stuff on this object
+    },
     _renderMapBackground: function() {
         var world = App.globals.worldMap;
         var countries = topojson.feature(world, world.objects.countries).features;
@@ -200,16 +200,16 @@ App.MediaPickerView = Backbone.View.extend({
     el: $("#am-media-picker"),
     template: _.template($('#am-media-picker-template').html()),
     initialize: function(){
-    	this.render();
+        this.render();
     },
     render: function(){
-    	this.$el.html( this.template() );
+        this.$el.html( this.template() );
         for(idx in this.options['mediaSources']){
-        	var itemView = new App.MediaPickerItemView({
-        		'mediaSource': this.options['mediaSources'][idx]
-        	});
-        	itemView.render();
-        	this.$('ul').append(itemView.el);
+            var itemView = new App.MediaPickerItemView({
+                'mediaSource': this.options['mediaSources'][idx]
+            });
+            itemView.render();
+            this.$('ul').append(itemView.el);
             if (this.options['mediaSources'][idx].id == this.options['currentMediaId']){
                 itemView.$el.addClass('active');
             }
@@ -222,24 +222,24 @@ App.MediaPickerItemView = Backbone.View.extend({
     className: 'am-media-picker-item',
     template: _.template($('#am-media-picker-item-template').html()),
     events: {
-    	"click	"	:    "handleClick"
+        "click    "    :    "handleClick"
     },
     initialize: function(){
     },
     render: function(){
-		var content = this.template({
-			id: this.options.mediaSource.get('mediaType'),
-			name: this.options.mediaSource.get('name')
-		});
+        var content = this.template({
+            id: this.options.mediaSource.get('mediaType'),
+            name: this.options.mediaSource.get('name')
+        });
         this.$el.attr('type','button');
         this.$el.html( content );
     },
     handleClick: function(){
-    	var mediaType = this.options.mediaSource.get('mediaType');
+        var mediaType = this.options.mediaSource.get('mediaType');
         this.$el.addClass('active');
         this.$el.siblings().removeClass('active')
-    	App.debug("switch to media "+mediaType);
-    	App.globals.eventMgr.trigger("changeMediaSource",mediaType);
+        App.debug("switch to media "+mediaType);
+        App.globals.eventMgr.trigger("changeMediaSource",mediaType);
     }
 });
 
@@ -341,7 +341,32 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
                 people: peopleHtml,
                 keywords: keywordHtml
             });
+        
+            // Create donut chart
+            var el = this.el;
+            console.log(this.options.country);
+            console.log(this.options.country.get('topics_field'));
+            var topicData = JSON.parse(this.options.country.get('topics_field'));
+            nv.addGraph(function() {
+                var chart = nv.models.pieChart()
+                    .x(function(d) { return d.topic })
+                    .y(function(d) { return d.value })
+                    .showLabels(true)     //Display pie labels
+                    .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
+                    .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
+                    .donut(true)          //Turn on Donut mode. Makes pie chart look tasty!
+                    .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
+                    ;
+        
+                d3.select(el).select(".viz svg")
+                    .datum(topicData)
+                    .transition().duration(350)
+                    .call(chart);
+                
+                return chart;
+            });
         }
+        
         this.$el.html( content );
         $('.am-media-map h3').fadeOut();
         this.$el.fadeIn();
