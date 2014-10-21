@@ -5,8 +5,9 @@ App.MediaMapView = Backbone.View.extend({
     template: _.template($('#am-media-map-template').html()),
     initialize: function(){
         this.id = "am-media-map-"+this._getMediaId();
-        _.bindAll(this, 'changeMediaId', 'handleValidCountryClick')
+        _.bindAll(this, 'changeMediaId', 'changeTopic', 'handleValidCountryClick')
          App.globals.eventMgr.bind("changeMediaSource", this.changeMediaId);
+         App.globals.eventMgr.bind("changeTopic", this.changeTopic);
         // init with first media source
         this.options.currentMediaId = this.options.mediaSources.at(0).get('mediaType');
         this.render();
@@ -41,7 +42,28 @@ App.MediaMapView = Backbone.View.extend({
 
             });
         }
+    },
         
+    changeTopic: function(topic){
+        App.debug("Changing to topic "+topic);
+        this.options.currentTopic = topic;
+        this._renderMapCountries();
+        
+        /* CSD - CHANGE AND PUT THIS SOMEWHERE ELSE MORE BACKBONEY??? */
+        if(this.map.selectedCountry != null){
+            this.map.selectedCountryID = this.map.selectedCountry.id; 
+            this.map.selectedCountryName = this.map.selectedCountry.get('name'); 
+        }
+
+        this.map.selectedCountry = this._getCurrentMediaSource().attributes.countries._byId[this.map.selectedCountryID];
+        
+        if(this.map.selectedCountry != null){
+            this.countryFocus = new App.MediaMapCountryFocusView({
+                    'country': this.map.selectedCountry,
+                    'name':this.map.selectedCountryName,
+
+            });
+        }
     },
     _getMediaId: function(){
         return this._getCurrentMediaSource().get('mediaType');
@@ -124,6 +146,9 @@ App.MediaMapView = Backbone.View.extend({
         map.color = d3.scale.log()
             .range([App.config.colors.minColor, App.config.colors.maxColor])
             .domain([1, map.maxWeight]);
+        map.topicColor = d3.scale.log()
+            .range([App.config.colors.minColor, App.config.colors.maxColor])
+            .domain([1, 100]);
         map.opacity = d3.scale.pow().exponent(2)
             .range([0, 1])
             .domain([0, map.maxWeight]);
@@ -167,7 +192,18 @@ App.MediaMapView = Backbone.View.extend({
             .remove();
         g.transition()
             .duration(1500)
-            .attr("fill", function (d) {return that.map.color(d.get('count'));} );
+            .attr("fill", function (d) {
+                if (that.options.currentTopic == 'All Topics') {
+                    return that.map.color(d.get('count'));
+                }
+                var count = _.find(
+                        JSON.parse(d.get('topics_field'))
+                        , function (d) {
+                            return d.topic == that.options.currentTopic;
+                        }
+                    ).value / 100 * 99 + 1;
+                return that.map.topicColor(count);
+            });
         
     },
     handleValidCountryMouseover: function(country) {
@@ -240,6 +276,53 @@ App.MediaPickerItemView = Backbone.View.extend({
         this.$el.siblings().removeClass('active')
         App.debug("switch to media "+mediaType);
         App.globals.eventMgr.trigger("changeMediaSource",mediaType);
+    }
+});
+
+App.TopicPickerView = Backbone.View.extend({
+    el: $("#am-topic-picker"),
+    template: _.template($('#am-topic-picker-template').html()),
+    topics: [ 'All Topics', 'Arts', 'Economy', 'Health', 'Politics', 'Science', 'Sports' ],
+    
+    initialize: function(){
+        this.render();
+    },
+    render: function(){
+        this.$el.html( this.template() );
+        for(idx in this.topics){
+            var itemView = new App.TopicPickerItemView({
+                'topic': this.topics[idx]
+            });
+            itemView.render();
+            this.$('ul').append(itemView.el);
+            if (this.topics[idx] == this.options['currentTopic']) {
+                itemView.$el.addClass('active');
+            }
+        }
+    }
+});
+
+App.TopicPickerItemView = Backbone.View.extend({
+    tagName: 'li',
+    className: 'am-topic-picker-item',
+    template: _.template($('#am-topic-picker-item-template').html()),
+    events: {
+        "click    "    :    "handleClick"
+    },
+    initialize: function(){
+    },
+    render: function(){
+        var content = this.template({
+            topic: this.options.topic
+        });
+        this.$el.attr('type','button');
+        this.$el.html( content );
+    },
+    handleClick: function(){
+        this.$el.addClass('active');
+        this.$el.siblings().removeClass('active')
+        App.debug("switch to topic "+this.options.topic);
+        App.globals.eventMgr.trigger("changeTopic",this.options.topic);
     }
 });
 
@@ -344,8 +427,6 @@ App.MediaMapCountryFocusView = Backbone.View.extend({
         
             // Create donut chart
             var el = this.el;
-            console.log(this.options.country);
-            console.log(this.options.country.get('topics_field'));
             var topicData = JSON.parse(this.options.country.get('topics_field'));
             nv.addGraph(function() {
                 var chart = nv.models.pieChart()

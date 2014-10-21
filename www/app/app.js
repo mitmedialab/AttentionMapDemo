@@ -59,10 +59,16 @@ window.App = {
             'currentMediaId':App.globals.allMediaSources.models[0].id,
             'mediaSources': App.globals.allMediaSources.models
         });
+        App.globals.topicPicker = new App.TopicPickerView({
+	    'currentTopic':'All Topics'
+	});
         // create all the maps
-        App.globals.mediaMap = new App.MediaMapView({'currentMediaId':App.globals.allMediaSources.models[0].id, 'mediaSources':App.globals.allMediaSources});
+        App.globals.mediaMap = new App.MediaMapView({
+	    'currentMediaId':App.globals.allMediaSources.models[0].id
+	    , 'mediaSources':App.globals.allMediaSources
+	    , 'currentTopic':'All Topics'
+	});
         $('#am-media-map').append(App.globals.mediaMap.el);
-        
     },
 
 

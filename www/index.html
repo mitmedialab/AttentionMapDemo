@@ -34,6 +34,7 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                  <div class="collapse navbar-collapse navbar-ex1-collapse" style="padding-left:0">
                   <div id='am-media-picker'><!-- nav item views go here --></div>
+                  <div id='am-topic-picker'><!-- topic item views go here --></div>
                 </div><!-- /.navbar-collapse -->
               </div>
             </nav>
@@ -106,17 +107,27 @@
     <script type="text/template" id="am-media-picker-item-template">
       <a href="#"><%=name%></a>
     </script>
+
+    <script type="text/template" id="am-topic-picker-template">
+          <ul class="nav navbar-nav">
+          </ul>
+    </script>
+    <script type="text/template" id="am-topic-picker-item-template">
+        <a href="#"><%=topic%></a>
+    </script>
+
     <script type="text/template" id="am-country-focus-template">
       <h3><%=name%>: <%=country%></h3>
         <p><%=numArticles%> articles</p>
         <p><span class="shadow" style="<%=country_color%>" ><%=attention%></span></p>
       <h4>Topics</h4>
-      <div class="viz"><svg width="250" height="500"></svg></div>
+      <div class="viz"><svg width="250" height="350"></svg></div>
       <h4>Top People</h4>
       <p><%=people%></p>
       <h4>Keywords</h4>
       <p><%=keywords%></p>
     </script>
+    
     <script type="text/template" id="am-media-map-template">
       
       <div class="am-world-map"></div>
