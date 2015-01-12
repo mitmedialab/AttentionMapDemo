@@ -12,6 +12,8 @@ downloader/duplicateWork/story_utils.py
 
 *.log
 
+.DS_Store
+
 www/us.json
 
 www/zoom.html
